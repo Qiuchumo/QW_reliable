@@ -119,7 +119,6 @@ with pm.Model() as model1:
     # define priors
     alpha = pm.HalfCauchy('alpha', 10, testval=.6)
 
-
     beta3 = pm.Normal('beta3', 0, 100)
     beta2 = pm.Normal('beta2', 0, 100)
     beta1 = pm.Normal('beta1', 0, 100, shape=companiesABC)
@@ -161,8 +160,9 @@ with model1:
     trace = approx.sample(3000, include_transformed=True)
     elbos1 = -inference.hist
 
-chain = trace[1000:]
-varnames2 = ['beta', 'beta1', 'beta2', 'beta3', 'beta_mu']
+
+chain = trace[2000:]
+varnames2 = ['beta', 'beta1', 'beta2', 'beta3']
 # # pm.plot_posterior(chain2, varnames2, ref_val=0)
 pm.traceplot(chain)
 plt.show()
@@ -170,82 +170,98 @@ pm.traceplot(chain, varnames2)
 plt.show()
 
 
-# varnames1 = ['beta', 'beta1']
-# # print(pm.df_summary(trace2, varnames1))
-# varnames2 = ['beta', 'beta1', 'beta2', 'beta3', 'beta_mu']
-# # pm.plot_posterior(chain2, varnames2, ref_val=0)
-# pm.traceplot(chain)
-# plt.show()
-#
-# pm.traceplot(chain, varnames2)
-# plt.show()
 
+# 需要着重分析：'beta', 'beta1', 'beta2', 'beta3'
+varnames2 = ['beta', 'beta1', 'beta2', 'beta3']
+tmp = pm.df_summary(chain, varnames2)
+betaMAP = tmp['mean'][np.arange(companiesABC)]
+beta1MAP = tmp['mean'][np.arange(companiesABC) + companiesABC]
+beta2MAP = tmp['mean'][2*companiesABC]
+beta3MAP = tmp['mean'][2*companiesABC + 1]
 
+from matplotlib import gridspec
 
+plt.figure(figsize=(12, 5))
+gs = gridspec.GridSpec(1, 3)
+for ip in np.arange(companiesABC):
+    ax = plt.subplot(gs[ip])
+    xp = elec_year2[ip * 7:(ip + 1) * 7, :]
+    yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
+    ax.plot(xp, yp, marker='o', alpha=.8)
 
-# #=============== 建模，模型2 ===========================================
-start = trace[0]
-start['zij'] = start['zij'].astype(int)
-stds = approx.rmap(approx.std.eval())
-cov = model1.dict_to_array(stds) ** 2
-with pm.Model() as model2:
-    # define priors
-    alpha = pm.HalfCauchy('alpha', 10, testval=.6)
+    xl = np.linspace(0.5, 6.5, 40)
+    yl = np.exp(
+        betaMAP[ip] + beta1MAP[ip] * xl + beta2MAP * elec_Pca_char1[ip * 42:(ip * 42 + 40)] +\
+        beta3MAP * elec_Pca_char2[ip * 42:(ip * 42 + 40)])
 
-
-    beta3 = pm.Normal('beta3', 0, 100)
-    beta2 = pm.Normal('beta2', 0, 100)
-    beta1 = pm.Normal('beta1', 0, 100, shape=companiesABC)
-    beta = pm.Normal('beta', 0, 100, shape=companiesABC)
-    # u = pm.Normal('u', 0, 0.0001)
-
-    # beta_mu = pm.Deterministic('beta_mu', tt.exp(beta[Num_shared] + beta1[Num_shared] * xs_year + beta2 * xs_char1 + beta3 * xs_char2))
-    linerpredi = tt.exp(beta[companyABC] + beta1[companyABC] * elec_year + beta2 * elec_Pca_char1 + beta3 * elec_Pca_char2)
-
-    # latent model for contamination
-    sigma_p = pm.Uniform('sigma_p', lower=0, upper=3)
-    mu_p = pm.Normal('mu_p', mu=0, tau=.001)
-    probitphi = pm.Normal('probitphi', mu=mu_p, sd=sigma_p, shape=companiesABC, testval=np.ones(companiesABC))
-    phii = pm.Deterministic('phii', Phi(probitphi))
-
-    pi_ij = pm.Uniform('pi_ij', lower=0, upper=1, shape=companyABC.shape)
-
-    # Zij:判断条件，theanof.tt_rng()：Get the package-level random number generator or new with specified seed
-    zij = pm.Bernoulli('zij', p=phii[companyABC], shape=companyABC.shape)
-    beta_mu = pm.Deterministic('beta_mu', tt.switch(tt.eq(zij, 0), linerpredi, pi_ij))
-
-    # Observed_pred = pm.Weibull("Observed_pred",  alpha=mu, beta=sigma, shape=elec_faults.shape)  # 观测值
-    Observed = pm.Weibull("Observed", alpha=alpha, beta=beta_mu, observed=elec_faults)  # 观测值
-
-    # start = pm.find_MAP()
-    # step = pm.Slice([beta1, u])
-    step = pm.NUTS(scaling=cov, is_cov=True)
-    trace2 = pm.sample(3e3, step=step, start=start)
-
-chain2 = trace2[1000:]
-varnames2 = ['beta', 'beta1', 'beta2', 'beta3', 'beta_mu']
-# # pm.plot_posterior(chain2, varnames2, ref_val=0)
-pm.traceplot(chain2)
-plt.show()
-pm.traceplot(chain2, varnames2)
+    plt.plot(xl, yl, 'k', linewidth=2)
+    plt.axis([0, 7, -.1, 4.5])
+plt.tight_layout()
 plt.show()
 
 
-# 两种能量图
-# energy = trace['energy']
-# energy_diff = np.diff(energy)
-# sns.distplot(energy - energy.mean(), label='energy')
-# sns.distplot(energy_diff, label='energy diff')
-# plt.legend()
-# plt.show()
-pm.energyplot(trace)
+
+burnin = 2000
+ppcsamples = 500
+ppcsize = 100
+fig = plt.figure(figsize=(16, 8))
+fig.text(0.5, -0.02, 'Test Interval (ms)', ha='center', fontsize=20)
+fig.text(-0.02, 0.5, 'Proportion of Long Responses', va='center', rotation='vertical', fontsize=20)
+gs = gridspec.GridSpec(1, 3)
+ppcsamples = 100
+
+for ip in np.arange(companiesABC):
+    ax = plt.subplot(gs[ip])
+    xp = elec_year2[ip * 7:(ip + 1) * 7, :]
+    yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
+    ax.plot(xp, yp, marker='o', alpha=.8)
+
+    xl = np.linspace(0.5, 6.5, 40)
+    yl = np.exp(
+        betaMAP[ip] + beta1MAP[ip] * xl + beta2MAP * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + \
+        beta3MAP * elec_Pca_char2[ip * 42:( ip * 42 + 40)])
+
+    # Posterior sample from the trace
+    for ips in np.random.randint(burnin, 3000, ppcsamples):
+        param = trace[ips]
+        yl2 = np.exp(param['beta'][ip] + param['beta1'][ip] * (xl) + param['beta2'] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + \
+            param['beta3'] * elec_Pca_char2[ip * 42:(ip * 42 + 40)])
+        plt.plot(xl, yl2, 'k', linewidth=2, alpha=.05)
+
+    plt.plot(xl, yl, 'k', linewidth=2)
+    plt.axis([0, 7, -.1, 4.5])
+    plt.title('Subject %s' % (ip + 1))
+
+plt.tight_layout()
 plt.show()
-# map_estimate = pm.find_MAP(model=model1)
-# print(map_estimate)
-# # 画出自相关曲线
-# pm.autocorrplot(chain, varnames1)
-# plt.show()
-# print(pm.waic(trace2, model1))
+
+# 两个特征值的联合后验
+trace_beta2 = trace['beta2'][burnin:]
+trace_beta3 = trace['beta3'][burnin:]
+datamap = np.vstack((trace_beta2, trace_beta3))
+df = pd.DataFrame(datamap.transpose(), columns=["x", "y"])
+g = sns.jointplot(x="x", y="y", data=df, kind="kde", color="g", stat_func=None, xlime=(-2,2), ylime=(-2,2))
+g.plot_joint(plt.scatter, c="w", s=30, linewidth=1, marker=".")
+plt.show()
+
+
+fig = plt.figure(figsize=(4, 2))
+a = trace['beta1'][1000:]
+plt.boxplot(a)
+plt.show()
+
+# 估计密度函数
+fig = plt.figure(figsize=(4, 2))
+from scipy.stats.kde import gaussian_kde
+kde_beta2 = trace['beta2'][burnin:]
+kde_beta3 = trace['beta3'][burnin:]
+my_pdf = gaussian_kde(kde_beta2)
+x = np.linspace(-2, 2, 300)
+plt.plot(x, my_pdf(x))
+plt.show()
+
+
+
 
 
 
