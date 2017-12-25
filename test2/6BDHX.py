@@ -15,7 +15,7 @@ from matplotlib.font_manager import FontProperties
 # from pymc3 import get_data
 font = FontProperties(fname=r"C:\\WINDOWS\\Fonts\\simsun.ttc", size=14)
 np.set_printoptions(precision=0, suppress=True)
-# 2017.12.3编辑  可靠性分析项目，两省数据分析，用于论文
+# 2017.12.3编辑  可靠性分析项目，两省数据分析，用于北大核心小论文
 # 撰写人：邱楚陌
 # ======================================================================
 # 数据导入

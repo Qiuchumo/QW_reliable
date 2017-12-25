@@ -41,9 +41,10 @@ def pcaa(dataMat,percentage=0.99):
     return lowDDataMat, reconMat
 
 
-
+'''
 if __name__ == '__main__':
-  elec_data = pd.read_csv('XZZZ.csv')
+  elec_data1 = pd.read_csv('XZZZ.csv') # 经过了标准差处理的数据
+  elec_data = pd.read_csv('XZ_nomean.csv') # 没有经过均值标准差处理的数据
 
   # X = np.array([[-1, 1], [-2, -1], [-3, -2], [1, 1], [2, 1], [3, 2]])
   X = np.array(elec_data)
@@ -51,8 +52,8 @@ if __name__ == '__main__':
   # ax = ax3(figure1)
   # ax.scatter3D(X[:, 0], X[:, 1], X[:, 2], alpha=0.7)
   # plt.show()
-  # #白化，使得每个特征具有相同的方差。
-  pca = PCA(n_components=3, whiten=True)
+  # #白化，使得每个特征具有相同的方差。添加whiten=True
+  pca = PCA(n_components=2, whiten=True)
   pca.fit(X)
   # 将数据X转换成降维后的数据。当模型训练好后，对于新输入的数据，都可以用transform方法来降维。
   x1 = pca.transform(X)
@@ -79,11 +80,11 @@ if __name__ == '__main__':
   # plt.show()
 
   print('BBBBBBBBBBBBBBBBB\n\n')
-  x, z= pcaa(X)
+  x, z= pcaa(elec_data1)
   XX = np.array(x)
   ZZ = np.array(z)
   print(x)
   print('CCCCCCCCCCCCCCCCC\n\n')
   print(z)
   print('DDDDDDDDDDDDDDDDD\n\n')
-
+'''
