@@ -33,7 +33,7 @@ with model:
 # #=============== 建模，模型2 ===========================================
 start = trace[0]
 start['zij'] = start['zij'].astype(int)
-stds = approx.rmap(approx.std.eval())
+stds = approx.bij.rmap(approx.std.eval())
 cov = model1.dict_to_array(stds) ** 2
 with pm.Model() as model2:
     # define priors

@@ -113,7 +113,7 @@ def Phi(x):
     # probit transform
     return 0.5 + 0.5 * pm.math.erf(x/pm.math.sqrt(2))
 
-# 建模，模型1
+# 建模，模型1，只有模型因子是单个pooling的，其余为多个
 
 with pm.Model() as model1:
     # define priors

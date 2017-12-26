@@ -113,7 +113,7 @@ def Phi(x):
     # probit transform
     return 0.5 + 0.5 * pm.math.erf(x/pm.math.sqrt(2))
 
-# 建模，模型1
+# 建模，模型1，该模型为unpooling模型，可用于检测因素影响分析
 
 with pm.Model() as model1:
     # define priors
@@ -321,5 +321,44 @@ plt.tight_layout()
 plt.show()
 
 
+gs = gridspec.GridSpec(1, 3)
+fig = plt.figure(figsize=(12, 4))
+for ip in np.arange(companiesABC):
+    ax = plt.subplot(gs[ip])
+    ax = sns.violinplot(data=elec_faults2[ip*7:(ip+1)*7])
+plt.xlabel('Stimulus')
+plt.ylabel('Category Decision')
+plt.show()
+
+# 后验分析
+ppc = pm.sample_ppc(trace, samples=1000, model=model1)
+yipred = ppc['Observed']
+# plt.hist(yipred, normed=1, bins=80, alpha=.8, label='Posterior')
+# plt.show()
+plt.figure()
+ax = sns.distplot(ppc['Observed'].mean(axis=1), label='Posterior predictive means') # axis=1以行方式计算
+ax.axvline(elec_faults.mean(), color='r', ls='--', label='True mean')
+ax.legend()
+plt.show()
 
 
+# 预测，此时这种格式是每行列数len(elec_faults)个，有很多行数据
+ppc = pm.sample_ppc(trace, samples=1000, model=model1)
+yipred = ppc['Observed']
+xipred = {}
+yipred_mean = yipred.mean(axis=0)
+
+fig = plt.figure(figsize=(12, 4))
+gs = gridspec.GridSpec(1, 3)
+for ip in np.arange(companiesABC):
+    ax = plt.subplot(gs[ip])
+    xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
+    yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
+    ax.plot(xp, yp, marker='o', alpha=.8)
+
+    yipred_yplot = np.array([yipred_mean[i * 6:(i + 1) * 6] for i in np.arange(7 * ip, (ip + 1) * 7)])
+    xipred = np.array([np.arange(6) + 1 for i in np.arange(7)])
+    ax.plot(xipred, yipred_yplot[:], 'k+-', color='r')
+
+plt.tight_layout()
+plt.show()
