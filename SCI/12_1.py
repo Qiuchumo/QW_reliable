@@ -69,6 +69,8 @@ pca = PCA(n_components=2, whiten=True)
 pca.fit(elec_Pca)
 # 将数据X转换成降维后的数据。当模型训练好后，对于新输入的数据，都可以用transform方法来降维。
 elec_Pca1 = pca.transform(elec_Pca)
+eeee = pca.inverse_transform(elec_Pca1)
+
 elec_Pca1 = np.array(elec_Pca1)
 elec_Pca_char1 = elec_Pca1[:, 0] # 降维特征1
 elec_Pca_char2 = elec_Pca1[:, 1] # 降维特征2

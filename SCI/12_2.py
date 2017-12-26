@@ -9,6 +9,8 @@ import pandas as pd
 from sklearn.decomposition import PCA, KernelPCA
 from Plot_XZ import *
 from PCA import *
+from matplotlib import gridspec
+from scipy.stats.kde import gaussian_kde
 from scipy.special import gamma
 from theano.compile.ops import as_op
 
@@ -305,7 +307,7 @@ plt.show()
 
 # 估计密度函数
 fig = plt.figure(figsize=(8, 4))
-from scipy.stats.kde import gaussian_kde
+
 
 kde_beta2 = trace['beta2'][burnin:]
 kde_beta3 = trace['beta3'][burnin:]
