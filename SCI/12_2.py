@@ -114,19 +114,30 @@ def Phi(x):
     return 0.5 + 0.5 * pm.math.erf(x/pm.math.sqrt(2))
 
 # 建模，模型1，该模型为unpooling模型，可用于检测因素影响分析
+# 建模，模型1
 
 with pm.Model() as model1:
     # define priors
     alpha = pm.HalfCauchy('alpha', 10, testval=.6)
 
-    beta3 = pm.Normal('beta3', 0, 100, shape=companiesABC)
-    beta2 = pm.Normal('beta2', 0, 100, shape=companiesABC)
-    beta1 = pm.Normal('beta1', 0, 100, shape=companiesABC)
-    beta = pm.Normal('beta', 0, 100, shape=companiesABC)
-    # u = pm.Normal('u', 0, 0.0001)
+    mu_3 = pm.Normal('mu_3', mu=0, tau=.001)
+    sd_3 = pm.HalfCauchy('sd_3', 10)
+    mu_2 = pm.Normal('mu_2', mu=0, tau=.001)
+    sd_2 = pm.HalfCauchy('sd_2', 10)
+    mu_1 = pm.Normal('mu_1', mu=0, tau=.001)
+    sd_1 = pm.HalfCauchy('sd_1', 10)
+    mu_0 = pm.Normal('mu_0', mu=0, tau=.001)
+    sd_0 = pm.HalfCauchy('sd_0', 10)
+
+    beta3 = pm.Normal('beta3', mu_3, sd_3, shape=companiesABC)
+    beta2 = pm.Normal('beta2', mu_2, sd_2, shape=companiesABC)
+    beta1 = pm.Normal('beta1', mu_1, sd_1, shape=companiesABC)
+    beta = pm.Normal('beta', mu_0, sd_0)
+    u = pm.Normal('u', 0, 0.01)
 
     # beta_mu = pm.Deterministic('beta_mu', tt.exp(beta[Num_shared] + beta1[Num_shared] * xs_year + beta2 * xs_char1 + beta3 * xs_char2))
-    linerpredi = tt.exp(beta[companyABC] + beta1[companyABC] * elec_year + beta2[companyABC] * elec_Pca_char1 + beta3[companyABC] * elec_Pca_char2)
+    linerpredi = tt.exp(u + beta + beta1[companyABC] * elec_year + \
+                        beta2[companyABC] * elec_Pca_char1 + beta3[companyABC] * elec_Pca_char2)
 
     # latent model for contamination
     sigma_p = pm.Uniform('sigma_p', lower=0, upper=3)
@@ -161,19 +172,45 @@ with model1:
     elbos1 = -inference.hist
 
 chain = trace[2000:]
-varnames2 = ['beta', 'beta1', 'beta2', 'beta3']
+# varnames2 = ['beta', 'beta1', 'beta2', 'beta3', 'u', 'beta4']
 pm.traceplot(chain)
 plt.show()
 
+# 预测，此时这种格式是每行列数len(elec_faults)个，有很多行数据
+ppc = pm.sample_ppc(trace, samples=500, model=model1)
+yipred = ppc['Observed']
+xipred = {}
+yipred_mean = yipred.mean(axis=0)
 
+fig = plt.figure(figsize=(12, 4))
+gs = gridspec.GridSpec(1, 3)
+for ip in np.arange(companiesABC):
+    ax = plt.subplot(gs[ip])
+    xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
+    yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
+    ax.plot(xp, yp, marker='o', alpha=.8)
 
-# 需要着重分析：'beta', 'beta1', 'beta2', 'beta3'
-varnames2 = ['beta', 'beta1', 'beta2', 'beta3']
+    yipred_yplot = np.array([yipred_mean[i * 6:(i + 1) * 6] for i in np.arange(7 * ip, (ip + 1) * 7)])
+    xipred = np.array([np.arange(6) + 1 for i in np.arange(7)])
+    ax.plot(xipred, yipred_yplot[:], 'k+-', color='r')
+
+plt.tight_layout()
+plt.show()
+
+varnames2 = ['beta', 'beta1', 'beta2', 'beta3', 'u']
 tmp = pm.df_summary(chain, varnames2)
-betaMAP = tmp['mean'][np.arange(companiesABC)]
-beta1MAP = tmp['mean'][np.arange(companiesABC) + companiesABC]
-beta2MAP = tmp['mean'][np.arange(companiesABC) + 2*companiesABC]
-beta3MAP = tmp['mean'][np.arange(companiesABC) + 3*companiesABC]
+betaMAP = tmp['mean'][0]
+beta1MAP = tmp['mean'][np.arange(companiesABC) + 1]
+beta2MAP = tmp['mean'][np.arange(companiesABC) + 1*companiesABC+1]
+beta3MAP = tmp['mean'][np.arange(companiesABC) + 2*companiesABC+1]
+# beta4MAP = tmp['mean'][np.arange(companiesABC) + 4*companiesABC]
+uMAP = tmp['mean'][3*companiesABC+1]
+# print(uMAP)
+# print(beta1MAP)
+# print(tmp)
+# print(beta2MAP)
+# print(beta3MAP)
+
 
 from matplotlib import gridspec
 
@@ -183,21 +220,25 @@ for ip in np.arange(companiesABC):
     ax = plt.subplot(gs[ip])
     xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
     yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
-    ax.plot(xp, yp, marker='o', alpha=.8)
 
     xl = np.linspace(0.5, 6.5, 40)
-    yl = np.exp(betaMAP[ip] + beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + beta3MAP[
-        ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)])
+    yl = np.exp(uMAP + betaMAP + beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + \
+                beta3MAP[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)])
 
-    plt.plot(xl, yl, 'k', linewidth=2)
-    plt.axis([0, 7, -.1, 4.5])
+    ax.plot(xp, yp, marker='o', alpha=.8)
+    ax = sns.violinplot(data=elec_faults2[ip * 7:(ip + 1) * 7])
+    ax.plot(xl, yl, 'k', linewidth=2)
+    plt.axis([0.5, 7, -.1, 4.5])
     plt.title('Subject %s' % (ip + 1))
 plt.tight_layout()
 plt.show()
+# print(yl)
+
 
 
 ppcsamples = 500
 ppcsize = 100
+# ppc = defaultdict(list)
 burnin = 2000
 fig = plt.figure(figsize=(16, 8))
 fig.text(0.5, -0.02, 'Test Interval (ms)', ha='center', fontsize=20)
@@ -211,28 +252,45 @@ for ip in np.arange(companiesABC):
     yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
 
     xl = np.linspace(0.5, 6.5, 40)
-    yl = np.exp(betaMAP[ip] + beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + beta3MAP[
-        ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)])
+    yl = np.exp(uMAP + betaMAP + beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + \
+                beta3MAP[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)])
 
     # Posterior sample from the trace
     for ips in np.random.randint(burnin, 3000, ppcsamples):
         param = trace[ips]
-        yl2 = np.exp(param['beta'][ip] + param['beta1'][ip] * (xl) + param['beta2'][ip] * elec_Pca_char1[
-                                                                                          ip * 42:(ip * 42 + 40)] + \
-                     param['beta3'][ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)])
-        plt.plot(xl, yl2, 'k', linewidth=2, alpha=.05)
+        yl2 = np.exp(param['u'] + param['beta'] + param['beta1'][ip] * (xl) + \
+                     param['beta2'][ip] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + \
+                     param['beta3'][ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)]
+                     )
+        ax.plot(xl, yl2, 'k', linewidth=2, alpha=.05)
 
+    ax = sns.violinplot(data=elec_faults2[ip * 7:(ip + 1) * 7])
     ax.plot(xp, yp, marker='o', alpha=.8)
     plt.plot(xl, yl, 'k', linewidth=2)
-    plt.axis([0, 7, -.1, 4.5])
+    plt.axis([0.5, 7, -.1, 4.5])
     plt.title('Subject %s' % (ip + 1))
 
 plt.tight_layout()
 plt.show()
 
+
+from scipy.stats.kde import gaussian_kde
+fig = plt.figure(figsize=(16, 8))
+fig.text(0.5, -0.02, 'JND (ms)', ha='center', fontsize=20)
+fig.text(-0.02, 0.5, 'Posterior Density', va='center', rotation='vertical', fontsize=20)
+gs = gridspec.GridSpec(1, 3)
+
+ppcsamples = 500
+
+def find_nearest(array, value):
+    idx = (np.abs(array - value)).argmin()
+    return idx
+
+
 # 两个特征值的联合后验
 trace_beta2 = trace['beta2'][burnin:]
 trace_beta3 = trace['beta3'][burnin:]
+# datamap = np.vstack((trace_beta2[:, 1], trace_beta3[:,1]))
 datamap = np.vstack((trace_beta2[1], trace_beta3[1]))
 df = pd.DataFrame(datamap.transpose(), columns=["x", "y"])
 g = sns.jointplot(x="x", y="y", data=df, kind="kde", color="g", stat_func=None, xlime=(-2,2), ylime=(-2,2))
@@ -266,8 +324,6 @@ for ip in np.arange(companiesABC):
 plt.tight_layout()
 plt.show()
 
-
-
 # 跟随特征变化分析
 fig = plt.figure(figsize=(15, 12))
 fig.text(0.5, -0.02, 'Test Interval (ms)', ha='center', fontsize=20)
@@ -287,16 +343,15 @@ for ip in np.arange(companiesABC):
     plt.xlabel('Years', fontsize=12)
 
     x0 = np.linspace(0.5, 6, 40)
-    y0 = np.exp(betaMAP[ip] + beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + beta3MAP[
+    y0 = np.exp(uMAP + betaMAP + beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + beta3MAP[
         ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)])
 
     # Posterior sample from the trace
-    for ips in np.random.randint(burnin, 3000, ppcsamples):
-        param = trace[ips]
-        yl2 = np.exp(param['beta'][ip] + param['beta1'][ip] * (xl) + param['beta2'][ip] * elec_Pca_char1[
-                                                                                          ip * 42:(ip * 42 + 40)] + \
-                     param['beta3'][ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)])
-    # ax0.plot(xl, yl2, 'k', linewidth=2, alpha=.05)
+    #     for ips in np.random.randint(burnin, 3000, ppcsamples):
+    #         param = trace[ips]
+    #         yl2 = np.exp(param['beta'][ip] + param['beta1'][ip] * (xl) + param['beta2'][ip]*elec_Pca_char1[ip*42:(ip*42+40)] + \
+    #                      param['beta3'][ip]*elec_Pca_char2[ip*42:(ip*42+40)])
+    #         ax0.plot(xl, yl2, 'k', linewidth=2, alpha=.05)
 
     ax1 = plt.subplot(gs[1 + ip * 3])
     my_pdf1 = gaussian_kde(kde_beta2[:, ip])
@@ -321,14 +376,21 @@ plt.tight_layout()
 plt.show()
 
 
+
 gs = gridspec.GridSpec(1, 3)
 fig = plt.figure(figsize=(12, 4))
 for ip in np.arange(companiesABC):
     ax = plt.subplot(gs[ip])
     ax = sns.violinplot(data=elec_faults2[ip*7:(ip+1)*7])
+# plt.plot(np.float32(x).T*40, color='gray', alpha=.1)
+# plt.plot(np.mean(np.float32(x).T*40, axis=1), color='r', alpha=1)
+# plt.xticks(np.arange(8), ''.join(map(str, np.arange(1, 9))))
+# plt.yticks([0, t], ('B', 'A'))
 plt.xlabel('Stimulus')
 plt.ylabel('Category Decision')
 plt.show()
+
+
 
 # 后验分析
 ppc = pm.sample_ppc(trace, samples=1000, model=model1)
@@ -341,24 +403,5 @@ ax.axvline(elec_faults.mean(), color='r', ls='--', label='True mean')
 ax.legend()
 plt.show()
 
-
-# 预测，此时这种格式是每行列数len(elec_faults)个，有很多行数据
-ppc = pm.sample_ppc(trace, samples=1000, model=model1)
-yipred = ppc['Observed']
-xipred = {}
-yipred_mean = yipred.mean(axis=0)
-
-fig = plt.figure(figsize=(12, 4))
-gs = gridspec.GridSpec(1, 3)
-for ip in np.arange(companiesABC):
-    ax = plt.subplot(gs[ip])
-    xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
-    yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
-    ax.plot(xp, yp, marker='o', alpha=.8)
-
-    yipred_yplot = np.array([yipred_mean[i * 6:(i + 1) * 6] for i in np.arange(7 * ip, (ip + 1) * 7)])
-    xipred = np.array([np.arange(6) + 1 for i in np.arange(7)])
-    ax.plot(xipred, yipred_yplot[:], 'k+-', color='r')
-
-plt.tight_layout()
-plt.show()
+# accept = trace.get_sampler_stats('mean_tree_accept', burn=burnin)
+# print('The accept rate is: %.5f' % (accept.mean()))
