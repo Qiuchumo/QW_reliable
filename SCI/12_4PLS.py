@@ -160,6 +160,7 @@ Y_PLSpred_HLJ =  np.vstack((Y_PLSpred_HLJ).T)[0]
 # print(Y_train_r)
 
 Y_PLSpred = np.vstack((Y_PLSpred_XZ, Y_PLSpred_XJ, Y_PLSpred_HLJ))
+Y_PLSpred_Target = np.vstack((Y_PLSR_XZ, Y_PLSR_XJ, Y_PLSR_HLJ)) # 目标值
 # print(Y_PLSpred)
 
 aaa = pls_HLJ.get_params(deep=True)
@@ -186,3 +187,12 @@ for ip in np.arange(companiesABC):
 plt.tight_layout()
 plt.show()
 
+# 计算均方误差
+def Rmse(predictions, targets):
+    return  np.sqrt(np.mean((predictions - targets)**2))
+
+rmse = {}
+for ip in np.arange(3):
+    rmse[ip] = Rmse(Y_PLSpred_Target[ip, :], Y_PLSpred[ip, :])
+
+print(rmse)
