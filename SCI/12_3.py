@@ -96,7 +96,7 @@ def Phi(x):
     return 0.5 + 0.5 * pm.math.erf(x/pm.math.sqrt(2))
 
 
-## 建模，模型
+# 建模，模型
 with pm.Model() as model1:
     # define priors
     alpha = pm.HalfCauchy('alpha', 10, testval=.6)
@@ -129,18 +129,20 @@ with pm.Model() as model1:
                                               beta3[Num_shared] * xs_char2 + beta4[Num_shared] * xs_year * xs_year)))
 
     phic = pm.Uniform('phic', lower=0, upper=1, testval=.3)
-    zck = pm.Bernoulli('zck', p=phic, shape=len(Num_shared.get_value()))
+    zij = pm.Bernoulli('zij', p=phic, shape=len(Num_shared.get_value()))
     #     zij_ = pm.theanof.tt_rng().uniform(size=xij.shape)
     #     zij = pm.Deterministic('zij', tt.lt(zij_, phii[sbjid]))
-    line = tt.constant(np.ones((len(Num_shared.get_value()))) * .5)
-    beta_mu = pm.Deterministic('beta_mu', tt.squeeze(tt.switch(tt.eq(zck, 0), liner, line)))
+    line = tt.constant(np.ones(len(Num_shared.get_value())) * .5)
+    beta_mu = pm.Deterministic('beta_mu', tt.squeeze(tt.switch(tt.eq(zij, 0), liner, line)))
 
     Observed = pm.Weibull("Observed", alpha=alpha, beta=beta_mu, observed=ys_faults)  # 观测值
 
     #     start = pm.find_MAP()
-    step = pm.Metropolis([zck])
+    step = pm.Metropolis([zij])
+#     step1 = pm.NUTS(scaling=cov, is_cov=True)
     #     step1 = pm.Slice([am0, am1])
     trace = pm.sample(4000, step=[step], init='advi+adapt_diag', tune=1000)
+
 
 
 chain = trace[2000:]
@@ -296,7 +298,7 @@ plt.show()
 
 # 读取测试数据集特征,
 data_cs = pd.read_csv('XZ_CS.csv')
-SNR_cs = np.random.normal(0, 4, size=[len(data_cs.Tem.values), 4])
+SNR_cs = np.random.normal(0, 2, size=[len(data_cs.Tem.values), 4])
 datax_cs = np.array(data_cs)[:,0:4] + SNR_cs # 添加噪声
 
 data_cs_year = data_cs.Year.values # 测试数据时间
@@ -307,12 +309,15 @@ newData_mean = datax_cs - meanVal
 StdVal  = np.std(datax_cs, axis=0)
 newData_std = newData_mean/StdVal
 
-Pca_cs = pca.transform(newData_std) # 测试数据PCA特征值，直接调用即可
+
+pca = PCA(n_components=2, whiten=True)
+pca.fit(newData_std)
+Pca_cs = pca.transform(newData_std) # 测试数据PCA特征值，直接调用即可，但是之调用这条也会出问题
 Pca_cs_char1 = Pca_cs[:, 0]
 Pca_cs_char2 = Pca_cs[:, 1]
 print(data_cs_year)
+# print(data_cs_num)
 # print(pm.waic(trace, model1))
-
 
 # 测试数据结果显示
 # print(data_cs_year)
@@ -326,11 +331,10 @@ with model1:
 post_pred = ppcc['Observed']
 yipred_mean = post_pred.mean(axis=0)
 
-# 预测，此时这种格式是每行列数len(elec_faults)个，有很多行数据
-from matplotlib import gridspec
+print(yipred_mean)
 
+# 预测，此时这种格式是每行列数len(elec_faults)个，有很多行数据
 xipred = {}
-# yipred_mean = post_pred.mean(axis=0)
 
 fig = plt.figure(figsize=(12, 4))
 gs = gridspec.GridSpec(1, 3)
@@ -346,7 +350,5 @@ for ip in np.arange(companiesABC):
 
 plt.tight_layout()
 plt.show()
-
-
 
 
