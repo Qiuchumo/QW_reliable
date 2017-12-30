@@ -166,27 +166,6 @@ Y_PLSpred_Target = np.vstack((Y_PLSR_XZ, Y_PLSR_XJ, Y_PLSR_HLJ)) # 目标值
 aaa = pls_HLJ.get_params(deep=True)
 print(aaa)
 
-
-# 画出预测图
-fig = plt.figure(figsize=(12, 4))
-gs = gridspec.GridSpec(1, 3)
-for ip in np.arange(companiesABC):
-    ax = plt.subplot(gs[ip])
-    xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
-    yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
-    ax.plot(xp, yp, marker='o', alpha=.8)
-
-    yipred_yplot = np.array([Y_PLSpred[ip][i * 6:(i + 1) * 6] for i in np.arange(7)])
-    xipred = np.array([np.arange(6) + 1 for i in np.arange(7)])
-
-    ax.plot(xipred, yipred_yplot[:], 'k+-', color='r')
-    plt.xlabel('time/year', fontsize=15)
-    plt.ylabel('fault rates', fontsize=12)
-    plt.title('Subject %s' % (ip + 1))
-
-plt.tight_layout()
-plt.show()
-
 # 计算均方误差
 def Rmse(predictions, targets):
     return  np.sqrt(np.mean((predictions - targets)**2))
@@ -196,3 +175,36 @@ for ip in np.arange(3):
     rmse[ip] = Rmse(Y_PLSpred_Target[ip, :], Y_PLSpred[ip, :])
 
 print(rmse)
+
+# 将预测值转化为均值形式
+AAA = np.array([Y_PLSpred_XZ[i*6:(i+1)*6] for i in np.arange(7)])
+BBB = np.array([Y_PLSpred_XJ[i*6:(i+1)*6] for i in np.arange(7)])
+CCC = np.array([Y_PLSpred_HLJ[i*6:(i+1)*6] for i in np.arange(7)])
+XZ_mean = AAA[:].mean(axis=0)
+XJ_mean = BBB[:].mean(axis=0)
+HLJ_mean = CCC[:].mean(axis=0)
+Y_PLSpred_MEAN = np.vstack((XZ_mean, XJ_mean, HLJ_mean))# Pls预测值
+print(Y_PLSpred_MEAN)
+# print(HLJ_mean)
+
+
+fig = plt.figure(figsize=(12, 4))
+gs = gridspec.GridSpec(1, 3)
+xipred = np.array(np.arange(6) + 1)
+
+for ip in np.arange(3):
+    ax = plt.subplot(gs[ip])
+    xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
+    yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
+    ax.plot(xp, yp, marker='o', alpha=.8)
+
+    yipred_yplot = np.array(Y_PLSpred_MEAN[ip])
+
+    ax.plot(xipred, yipred_yplot, 'k*-', color='r')
+    plt.xlabel('time/year', fontsize=15)
+    plt.ylabel('fault rates', fontsize=12)
+    plt.title('Subject %s' % (ip + 1))
+
+plt.tight_layout()
+plt.show()
+

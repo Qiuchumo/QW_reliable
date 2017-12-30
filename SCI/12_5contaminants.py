@@ -77,7 +77,7 @@ elec_Pca_char2 = elec_Pca1[:, 1] # 降维特征2
 # 计算故障率大小：故障数目/总测量数，作为模型Y值，放大100倍以增加实际效果，结果中要缩小100倍
 elec_faults = 100 * (elec_data.Fault.values / elec_data.Nums.values)  # 数组形式,计算故障率大小
 # elec_faults1 = (elec_faults - np.mean(elec_faults)) / np.std(elec_faults)
-# elec_faults[42] = 2
+elec_faults[42] = 2
 
 # print(elec_faults)
 # 将故障率以6组一行形式组成数组,变成：21*6
@@ -123,14 +123,14 @@ with pm.Model() as model_1:
     sd_2 = pm.HalfCauchy('sd_2', 10)
     mu_1 = pm.Normal('mu_1', mu=0, tau=.001)
     sd_1 = pm.HalfCauchy('sd_1', 10)
-    mu_0 = pm.Normal('mu_0', mu=0, tau=.001)
-    sd_0 = pm.HalfCauchy('sd_0', 20)
+    # mu_0 = pm.Normal('mu_0', mu=0, tau=.001)
+    # sd_0 = pm.HalfCauchy('sd_0', 20)
 
     beta4 = pm.Normal('beta4', mu_4, sd_4, shape=companiesABC)
     beta3 = pm.Normal('beta3', mu_3, sd_3, shape=companiesABC)
     beta2 = pm.Normal('beta2', mu_2, sd_2, shape=companiesABC)
     beta1 = pm.Normal('beta1', mu_1, sd_1, shape=companiesABC)
-    beta = pm.Normal('beta', mu_0, sd_0)
+    beta = pm.Normal('beta', 0, 100)
     u = pm.Normal('u', 0, 0.01)
 
     beta_mu = pm.Deterministic('beta_mu', tt.exp(u + beta + \
@@ -275,6 +275,7 @@ pm.traceplot(chain_2)
 plt.show()
 
 njob = 1
+burn = 5000
 start = trace_2[0]
 start['zij'] = start['zij'].astype(int)
 stds = approx.bij.rmap(approx.std.eval())
@@ -325,10 +326,10 @@ with pm.Model() as model_2b:
     Observed = pm.Weibull("Observed", alpha=alpha, beta=beta_mu, observed=ys_faults)  # 观测值
     #     start = pm.find_MAP()
     step = pm.NUTS(scaling=cov, is_cov=True)
-    trace_2b = pm.sample(4000, step=[step], start=start, njobs=njob)
+    trace_2b = pm.sample(burn, step=[step], start=start, njobs=njob)
 
-
-chain_2b = trace_2b[2000:]
+burnin = burn - 1000
+chain_2b = trace_2b[burnin:]
 # varnames2 = ['beta', 'beta1', 'beta2', 'beta3', 'u', 'beta4']
 pm.traceplot(chain_2b)
 plt.show()
@@ -354,7 +355,7 @@ uMAP2 = tmp2['mean'][4*companiesABC+1]
 ppcsamples = 500
 ppcsize = 100
 # ppc = defaultdict(list)
-burnin = 2000
+# burnin = 2000
 fig = plt.figure(figsize=(16, 8))
 fig.text(0.5, -0.02, 'Test Interval (ms)', ha='center', fontsize=20)
 fig.text(-0.02, 0.5, 'Proportion of Long Responses', va='center', rotation='vertical', fontsize=20)
