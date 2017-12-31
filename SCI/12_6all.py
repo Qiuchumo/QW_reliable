@@ -625,17 +625,6 @@ print(aaa)
 
 # 计算均方误差
 def Rmse(predictions, targets):
-    return  np.sqrt(np.mean((predictions - targets)**2))
-
-rmse = {}
-for ip in np.arange(3):
-    rmse[ip] = Rmse(Y_PLSpred_Target[ip, :], Y_PLSpred[ip, :])
-
-print('PLSR: ',rmse)
-
-
-# 计算均方误差
-def Rmse(predictions, targets):
     return np.sqrt(np.mean((predictions - targets) ** 2))
 
 

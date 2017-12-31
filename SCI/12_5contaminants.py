@@ -367,12 +367,13 @@ for ip in np.arange(companiesABC):
     xp = elec_year2[ip * 7:(ip + 1) * 7, :]
     yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
 
-    xl = np.linspace(0.5, 6.5, 40)
-    yl = np.exp(uMAP + betaMAP + (beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + \
-                                  beta3MAP[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)] + beta4MAP[ip] * xl * xl))
+    xl = np.linspace(0.5, 6.5, 6)
+    yl = np.exp(uMAP + betaMAP + (beta1MAP[ip]*xl + beta2MAP[ip]*elec_Pca_char1[ip*42:(ip*42+6)] + \
+                    beta3MAP[ip]*elec_Pca_char2[ip*42:(ip*42+6)] + beta4MAP[ip]*xl*xl))
 
-    y2 = np.exp(uMAP2 + betaMAP2 + (beta1MAP2[ip] * xl + beta2MAP2[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 40)] + \
-                                    beta3MAP2[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 40)] + beta4MAP2[ip] * xl * xl))
+    y2 = np.exp(uMAP2 + betaMAP2 + (beta1MAP2[ip] * xl + beta2MAP2[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
+                                beta3MAP2[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + beta4MAP2[
+                                    ip] * xl * xl))
     # Posterior sample from the trace
     #     for ips in np.random.randint(burnin, 3000, ppcsamples):
     #         param = trace[ips]
@@ -393,4 +394,111 @@ for ip in np.arange(companiesABC):
 plt.tight_layout()
 plt.show()
 
+
+WAIC = pm.compare([trace_1, trace_2b], [model_1, model_2b], ic='WAIC')
+print(WAIC)
+
+# 应用偏最小二乘PLS来进行仿真
+from sklearn.cross_decomposition import PLSRegression
+X_PLSR = np.vstack((elec_year, elec_tem, elec_hPa, elec_RH, elec_Lux)).T   # 特征数据合并为一个数组
+X_PLSR_XZ = X_PLSR[:42, :]
+X_PLSR_XJ = X_PLSR[42:84, :]
+X_PLSR_HLJ = X_PLSR[84:, :]
+# X_PLSR_HLJ[:5, 0]=7
+# print(X_PLSR_HLJ)
+Y_PLSR = elec_faults
+Y_PLSR_XZ = Y_PLSR[:42]
+Y_PLSR_XJ = Y_PLSR[42:84]
+Y_PLSR_HLJ = Y_PLSR[84:]
+# print(Y_PLSR_XZ)
+
+
+pls_XZ = PLSRegression(n_components=2)
+pls_XZ.fit(X_PLSR_XZ, Y_PLSR_XZ)
+# X_train_r, Y_train_r = pls_XZ.transform(X_PLSR_XZ, Y_PLSR_XZ)
+# PLSRegression(copy=True, max_iter=500, n_components=2, scale=True, tol=1e-06)
+Y_PLSpred_XZ = pls_XZ.predict(X_PLSR_XZ)
+Y_PLSpred_XZ =  np.vstack((Y_PLSpred_XZ).T)[0]
+# print(X_train_r)
+# print(Y_PLSpred_XZ)
+
+pls_XJ = PLSRegression(n_components=2)
+pls_XJ.fit(X_PLSR_XJ, Y_PLSR_XJ)
+# X_train_r, Y_train_r = pls_XZ.transform(X_PLSR_XZ, Y_PLSR_XZ)
+# PLSRegression(copy=True, max_iter=500, n_components=2, scale=True, tol=1e-06)
+Y_PLSpred_XJ = pls_XJ.predict(X_PLSR_XJ)
+Y_PLSpred_XJ =  np.vstack((Y_PLSpred_XJ).T)[0]
+# print(X_train_r)
+# print(Y_PLSpred_XJ)
+
+
+pls_HLJ = PLSRegression(n_components=2)
+pls_HLJ.fit(X_PLSR_HLJ, Y_PLSR_HLJ)
+# X_train_r, Y_train_r = pls_XZ.transform(X_PLSR_HLJ, Y_PLSR_HLJ)
+# PLSRegression(copy=True, max_iter=500, n_components=2, scale=True, tol=1e-06)
+Y_PLSpred_HLJ = pls_HLJ.predict(X_PLSR_HLJ)
+Y_PLSpred_HLJ =  np.vstack((Y_PLSpred_HLJ).T)[0]
+# print(Y_PLSpred_HLJ)
+# print(Y_train_r)
+
+Y_PLSpred = np.vstack((Y_PLSpred_XZ, Y_PLSpred_XJ, Y_PLSpred_HLJ))# Pls预测值
+Y_PLSpred_Target = np.vstack((Y_PLSR_XZ, Y_PLSR_XJ, Y_PLSR_HLJ)) # 目标值
+# print(Y_PLSpred)
+# print(Y_PLSpred)
+
+aaa = pls_HLJ.get_params(deep=True) # 获取参数
+print(aaa)
+
+
+# 计算均方误差
+def Rmse(predictions, targets):
+    return np.sqrt(np.mean((predictions - targets) ** 2))
+
+
+rmse = {}
+for ip in np.arange(3):
+    rmse[ip] = Rmse(Y_PLSpred_Target[ip, :], Y_PLSpred[ip, :])
+
+print('PLSR: ', rmse)
+
+y22 = np.zeros((21, 6))
+y22_1 = np.zeros((21, 6))
+for ip in np.arange(3):
+    for i in np.arange(7):
+        y22[(ip * 6 + i), :] = np.exp(uMAP2 + betaMAP2 + (
+        beta1MAP2[ip] * xl + beta2MAP2[ip] * elec_Pca_char1[(ip * 42 + i * 6):(ip * 42 + 6 * (i + 1))] + \
+        beta3MAP2[ip] * elec_Pca_char2[(ip * 42 + i * 6):(ip * 42 + 6 * (i + 1))] + beta4MAP2[ip] * xl * xl))
+        y22_1[(ip * 6 + i), :] = np.exp(uMAP + betaMAP + (
+        beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[(ip * 42 + i * 6):(ip * 42 + 6 * (i + 1))] + \
+        beta3MAP[ip] * elec_Pca_char2[(ip * 42 + i * 6):(ip * 42 + 6 * (i + 1))] + beta4MAP[ip] * xl * xl))
+
+a, a1, a2 = np.array([]), np.array([]), np.array([])
+global b_faults
+b_faults = Y_PLSpred
+a_1, a1_1, a2_1 = np.array([]), np.array([]), np.array([])
+global b_faults_1
+b_faults_1 = Y_PLSpred
+
+for i in np.arange(7):
+    a = np.append(a, y22[i])
+    a1 = np.append(a1, y22[i + 7])
+    a2 = np.append(a2, y22[i + 14])
+
+    a_1 = np.append(a_1, y22_1[i])
+    a1_1 = np.append(a1_1, y22_1[i + 7])
+    a2_1 = np.append(a2_1, y22_1[i + 14])
+b_faults = np.vstack((a, a1, a2))
+b_faults_1 = np.vstack((a_1, a1_1, a2_1))
+
+rmse2 = {}
+rmse2_1 = {}
+elec_fa = np.array([elec_faults[i * 42:(i + 1) * 42] for i in np.arange(3)])
+# print(elec_fa)
+# 模型2 的均方误差值
+
+for ip in np.arange(3):
+    rmse2[ip] = Rmse(b_faults[ip, :], elec_fa[ip, :])
+    rmse2_1[ip] = Rmse(b_faults_1[ip, :], elec_fa[ip, :])
+print('Model_1: ', rmse2_1)
+print('Model2: ', rmse2)
 
