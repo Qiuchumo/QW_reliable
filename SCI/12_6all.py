@@ -72,7 +72,7 @@ elec_Pca_char1 = elec_Pca1[:, 0] # 降维特征1
 elec_Pca_char2 = elec_Pca1[:, 1] # 降维特征2
 # elec_Pca_char3 = elec_Pca1[:, 2] # 降维特征2
 # print(elec_Pca_char1)
-# elec_data.Fault.values[53] =2300
+elec_data.Fault.values[53] =2000
 # 计算故障率大小：故障数目/总测量数，作为模型Y值，放大100倍以增加实际效果，结果中要缩小100倍
 elec_faults = 100 * (elec_data.Fault.values / elec_data.Nums.values)  # 数组形式,计算故障率大小
 # elec_faults1 = (elec_faults - np.mean(elec_faults)) / np.std(elec_faults)
@@ -141,7 +141,6 @@ for ip in np.arange(1):
 plt.tight_layout()
 plt.show()
 
-
 # ====================================================================
 # 模型1
 # ====================================================================
@@ -150,53 +149,43 @@ with pm.Model() as model_1:
     # define priors
     alpha = pm.HalfCauchy('alpha', 10, testval=.6)
 
-    #     sd_5 = pm.HalfNormal('sd_5', 0.5)
-
-    #     mu_4 = pm.Normal('mu_4', mu=0, tau=.001)
-    #     sd_4 = pm.HalfCauchy('sd_4', 10)
+    mu_4 = pm.Normal('mu_4', mu=0, tau=.001)
+    sd_4 = pm.HalfCauchy('sd_4', 10)
     mu_3 = pm.Normal('mu_3', mu=0, tau=.001)
-    sd_3 = pm.HalfCauchy('sd_3', 20)
-    #     mu_2 = pm.Normal('mu_2', mu=1, tau=1)
-    #     sd_2 = pm.HalfCauchy('sd_2', 20)
-    mu_1 = pm.Normal('mu_1', mu=1.5, tau=1.5)
+    sd_3 = pm.HalfCauchy('sd_3', 10)
+    mu_2 = pm.Normal('mu_2', mu=0, tau=.001)
+    sd_2 = pm.HalfCauchy('sd_2', 10)
+    mu_1 = pm.Normal('mu_1', mu=0, tau=.001)
     sd_1 = pm.HalfCauchy('sd_1', 10)
-    mu_0 = pm.Normal('mu_0', mu=-5)
-    sd_0 = pm.HalfCauchy('sd_0', 20)
-    #     sd_4 = pm.Uniform('sd_4', lower=-20, upper=20)
-    #     sd_3 = pm.Uniform('sd_3', lower=-10, upper=10)
-    #     sd_2 = pm.Uniform('sd_2', lower=-10, upper=10)
-    #     sd_1 = pm.Uniform('sd_1', lower=-20, upper=20)
-    #     sd_u = pm.InverseGamma('sd_u', 0.001, 0.001)
-
-    beta4 = pm.Normal('beta4', 0, 100, shape=companiesABC)
+#     mu_0 = pm.Normal('mu_0', mu=0, tau=.001)
+#     sd_0 = pm.HalfCauchy('sd_0', 20)
+    beta4 = pm.Normal('beta4', mu_4, sd_4, shape=companiesABC)
     beta3 = pm.Normal('beta3', mu_3, sd_3, shape=companiesABC)
-    beta2 = pm.Normal('beta2', 1, 100, shape=companiesABC)
+    beta2 = pm.Normal('beta2', mu_2, sd_2, shape=companiesABC)
     beta1 = pm.Normal('beta1', mu_1, sd_1, shape=companiesABC)
-    beta = pm.Normal('beta', mu_0, sd_0, shape=companiesABC)
-    #     u = pm.Normal('u', 0, sd_u*sd_u)
+    beta = pm.Normal('beta', 0, 100)
+    u = pm.Normal('u', 0, 0.01)
 
-    beta_mu = pm.Deterministic('beta_mu',
-                               tt.exp(beta[Num_shared] + (beta1[Num_shared] * xs_year) + beta2[Num_shared] * xs_char1 + \
-                                      beta3[Num_shared] * xs_char2 + beta4[Num_shared] * xs_year * xs_year))
+    beta_mu = pm.Deterministic('beta_mu', tt.exp(u + beta + \
+                                             (beta1[Num_shared] * xs_year + beta2[Num_shared] * xs_char1 +\
+                                              beta3[Num_shared] * xs_char2 + beta4[Num_shared] * xs_year * xs_year)))
 
     Observed = pm.Weibull("Observed", alpha=alpha, beta=beta_mu, observed=ys_faults)  # 观测值
-    trace_1 = pm.sample(2000)
+    trace_1 = pm.sample(3000,  init='advi+adapt_diag' )
 pm.traceplot(trace_1)
 plt.show()
 
-burnin = 1000
+burnin = 2000
 chain = trace_1[burnin:]
-# get MAP estimate, 'beta2', 'beta3','beta4', 'u'
-varnames2 = ['beta', 'beta1','beta2', 'beta3','beta4']
+# get MAP estimate
+varnames2 = ['beta', 'beta1', 'beta2', 'beta3','beta4', 'u']
 tmp = pm.df_summary(chain, varnames2)
-betaMAP = tmp['mean'][np.arange(companiesABC)]
-beta1MAP = tmp['mean'][np.arange(companiesABC) + companiesABC]
-beta2MAP = tmp['mean'][np.arange(companiesABC) + 2*companiesABC]
-beta3MAP = tmp['mean'][np.arange(companiesABC) + 3*companiesABC]
-beta4MAP = tmp['mean'][np.arange(companiesABC) + 4*companiesABC]
-# uMAP = tmp['mean'][4*companiesABC+1]
-xl = np.linspace(1, 6, 6)
-print(xl)
+betaMAP = tmp['mean'][0]
+beta1MAP = tmp['mean'][np.arange(companiesABC) + 1]
+beta2MAP = tmp['mean'][np.arange(companiesABC) + 1*companiesABC+1]
+beta3MAP = tmp['mean'][np.arange(companiesABC) + 2*companiesABC+1]
+beta4MAP = tmp['mean'][np.arange(companiesABC) + 3*companiesABC+1]
+uMAP = tmp['mean'][4*companiesABC+1]
 
 # 模型拟合效果图
 ppcsamples = 500
@@ -214,21 +203,21 @@ for ip in np.arange(companiesABC):
     xp = elec_year2[ip * 7:(ip + 1) * 7, :]
     yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
 
-    xl = np.linspace(0.6, 6.5, 6)
-    yl = np.exp(betaMAP[ip] + (beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
-                               beta3MAP[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + beta4MAP[ip] * xl * xl))
-    #     yl = np.exp(betaMAP[ip] + (beta1MAP[ip]*xl+ beta4MAP[ip]*xl*xl))
-    # Posterior sample from the trace
-    #     for ips in np.random.randint(burnin, 3000, ppcsamples):
-    #         param = trace_1[ips]
-    #         yl2 = np.exp(param['u'] + param['beta'] + (param['beta1'][ip] * (xl) + \
-    #                      param['beta2'][ip]*elec_Pca_char1[ip*42:(ip*42+6)] + \
-    #                      param['beta3'][ip]*elec_Pca_char2[ip*42:(ip*42+6)] + \
-    #                       + param['beta4'][ip] *xl*xl)
-    #                     )
-    #         ax.plot(xl, yl2, 'k', linewidth=2, alpha=.05)
+    xl = np.linspace(0.5, 6.5, 6)
+    yl = np.exp(uMAP + betaMAP + (beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
+                                  beta3MAP[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + beta4MAP[ip] * xl * xl))
 
-    #     ax = sns.violinplot(data=elec_faults2[ip*7:(ip+1)*7])
+    # Posterior sample from the trace
+    for ips in np.random.randint(burnin, 3000, ppcsamples):
+        param = trace_1[ips]
+        yl2 = np.exp(param['u'] + param['beta'] + (param['beta1'][ip] * (xl) + \
+                                                   param['beta2'][ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
+                                                   param['beta3'][ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + \
+                                                   + param['beta4'][ip] * xl * xl)
+                     )
+        ax.plot(xl, yl2, 'k', linewidth=2, alpha=.05)
+
+    ax = sns.violinplot(data=elec_faults2[ip * 7:(ip + 1) * 7])
     ax.plot(xp, yp, marker='o', alpha=.8)
     plt.plot(xl, yl, 'k', linewidth=2)
     plt.axis([0.5, 7, -.1, 4.5])
@@ -242,40 +231,36 @@ plt.show()
 # 模型2
 # ====================================================================
 # 建模，加上含污染模型对比
+# 建模，加上含污染模型对比
 with pm.Model() as model_2:
     # define priors
+    sdsd = 3
     alpha = pm.HalfCauchy('alpha', 10, testval=.6)
 
-    #     mu_4 = pm.Normal('mu_4', mu=0, tau=.001)
-    #     sd_4 = pm.HalfCauchy('sd_4', 10)
+    mu_4 = pm.Normal('mu_4', mu=0, tau=.001)
+    sd_4 = pm.HalfCauchy('sd_4', sdsd)
     mu_3 = pm.Normal('mu_3', mu=0, tau=.001)
-    sd_3 = pm.HalfCauchy('sd_3', 20)
-    #     mu_2 = pm.Normal('mu_2', mu=1, tau=1)
-    #     sd_2 = pm.HalfCauchy('sd_2', 20)
-    mu_1 = pm.Normal('mu_1', mu=1.5, tau=1.5)
-    sd_1 = pm.HalfCauchy('sd_1', 10)
-    mu_0 = pm.Normal('mu_0', mu=-5)
-    sd_0 = pm.HalfCauchy('sd_0', 20)
-    #     sd_4 = pm.Uniform('sd_4', lower=-20, upper=20)
-    #     sd_3 = pm.Uniform('sd_3', lower=-10, upper=10)
-    #     sd_2 = pm.Uniform('sd_2', lower=-10, upper=10)
-    #     sd_1 = pm.Uniform('sd_1', lower=-20, upper=20)
-    #     sd_u = pm.InverseGamma('sd_u', 0.001, 0.001)
-
-    beta4 = pm.Normal('beta4', 0, 100, shape=companiesABC)
+    sd_3 = pm.HalfCauchy('sd_3', sdsd)
+    mu_2 = pm.Normal('mu_2', mu=0, tau=.001)
+    sd_2 = pm.HalfCauchy('sd_2', sdsd)
+    mu_1 = pm.Normal('mu_1', mu=0, tau=.001)
+    sd_1 = pm.HalfCauchy('sd_1', sdsd)
+    #     mu_0 = pm.Normal('mu_0', mu=0, tau=.001)
+    #     sd_0 = pm.HalfCauchy('sd_0', 20)
+    beta4 = pm.Normal('beta4', mu_4, sd_4, shape=companiesABC)
     beta3 = pm.Normal('beta3', mu_3, sd_3, shape=companiesABC)
-    beta2 = pm.Normal('beta2', 1, 100, shape=companiesABC)
+    beta2 = pm.Normal('beta2', mu_2, sd_2, shape=companiesABC)
     beta1 = pm.Normal('beta1', mu_1, sd_1, shape=companiesABC)
-    beta = pm.Normal('beta', mu_0, sd_0, shape=companiesABC)
-    #     u = pm.Normal('u', 0, 0.01)
+    beta = pm.Normal('beta', 0, 100)
+    u = pm.Normal('u', 0, 0.01)
 
-    liner = pm.Deterministic('liner', tt.exp(beta[Num_shared] + \
+    liner = pm.Deterministic('liner', tt.exp(u + beta + \
                                              (beta1[Num_shared] * xs_year + beta2[Num_shared] * xs_char1 + \
                                               beta3[Num_shared] * xs_char2 + beta4[Num_shared] * xs_year * xs_year)))
 
     # latent model for contamination
     #     upper = pm.HalfCauchy('upper', 10)
-    sigma_p = pm.Uniform('sigma_p', lower=0, upper=7)
+    sigma_p = pm.HalfCauchy('sigma_p', sdsd)
     mu_p = pm.Normal('mu_p', mu=0, tau=.001)
 
     probitphi = pm.Normal('probitphi', mu=mu_p, sd=sigma_p, shape=companiesABC, testval=np.ones(companiesABC))
@@ -285,18 +270,11 @@ with pm.Model() as model_2:
 
     zij_ = pm.theanof.tt_rng().uniform(size=companyABC.shape)
     zij = pm.Deterministic('zij', tt.lt(zij_, phii[Num_shared]))
-    #     phic = pm.Uniform('phic', lower=0, upper=1, testval=.3)
-    #     zij = pm.Bernoulli('zij', p=phic, shape=len(Num_shared.get_value()))
-    #     line = tt.constant(np.ones(len(Num_shared.get_value())) * .5)
-    #     beta_mu = pm.Deterministic('beta_mu', tt.squeeze(tt.switch(tt.eq(zij, 0), liner, line)))
+
     beta_mu = pm.Deterministic('beta_mu', tt.switch(zij, liner, pi_ij))
 
     Observed = pm.Weibull("Observed", alpha=alpha, beta=beta_mu, observed=ys_faults)  # 观测值
-    #     start = pm.find_MAP()
-#     step = pm.Metropolis([zij])
-# #     step1 = pm.NUTS(scaling=cov, is_cov=True)
-#     #     step1 = pm.Slice([am0, am1])
-#     trace = pm.sample(4000, step=[step], init='advi+adapt_diag', tune=1000)
+
 import theano
 
 with model_2:
@@ -323,50 +301,41 @@ cov = model_2.dict_to_array(stds) ** 2
 # 建模，加上含污染模型对比
 with pm.Model() as model_2b:
     # define priors
+    sdsd = 3
     alpha = pm.HalfCauchy('alpha', 10, testval=.6)
 
-    #     mu_4 = pm.Normal('mu_4', mu=0, tau=.001)
-    #     sd_4 = pm.HalfCauchy('sd_4', 10)
+    mu_4 = pm.Normal('mu_4', mu=0, tau=.001)
+    sd_4 = pm.HalfCauchy('sd_4', sdsd)
     mu_3 = pm.Normal('mu_3', mu=0, tau=.001)
-    sd_3 = pm.HalfCauchy('sd_3', 20)
-    #     mu_2 = pm.Normal('mu_2', mu=1, tau=1)
-    #     sd_2 = pm.HalfCauchy('sd_2', 20)
-    mu_1 = pm.Normal('mu_1', mu=1.5, tau=1.5)
-    sd_1 = pm.HalfCauchy('sd_1', 10)
-    mu_0 = pm.Normal('mu_0', mu=-5)
-    sd_0 = pm.HalfCauchy('sd_0', 20)
-    #     sd_4 = pm.Uniform('sd_4', lower=-20, upper=20)
-    #     sd_3 = pm.Uniform('sd_3', lower=-10, upper=10)
-    #     sd_2 = pm.Uniform('sd_2', lower=-10, upper=10)
-    #     sd_1 = pm.Uniform('sd_1', lower=-20, upper=20)
-    #     sd_u = pm.InverseGamma('sd_u', 0.001, 0.001)
-
-    beta4 = pm.Normal('beta4', 0, 100, shape=companiesABC)
+    sd_3 = pm.HalfCauchy('sd_3', sdsd)
+    mu_2 = pm.Normal('mu_2', mu=0, tau=.001)
+    sd_2 = pm.HalfCauchy('sd_2', sdsd)
+    mu_1 = pm.Normal('mu_1', mu=0, tau=.001)
+    sd_1 = pm.HalfCauchy('sd_1', sdsd)
+    #     mu_0 = pm.Normal('mu_0', mu=0, tau=.001)
+    #     sd_0 = pm.HalfCauchy('sd_0', 20)
+    beta4 = pm.Normal('beta4', mu_4, sd_4, shape=companiesABC)
     beta3 = pm.Normal('beta3', mu_3, sd_3, shape=companiesABC)
-    beta2 = pm.Normal('beta2', 1, 100, shape=companiesABC)
+    beta2 = pm.Normal('beta2', mu_2, sd_2, shape=companiesABC)
     beta1 = pm.Normal('beta1', mu_1, sd_1, shape=companiesABC)
-    beta = pm.Normal('beta', mu_0, sd_0, shape=companiesABC)
-    #     u = pm.Normal('u', 0, 0.01)
+    beta = pm.Normal('beta', 0, 100)
+    u = pm.Normal('u', 0, 0.01)
 
-
-    liner = pm.Deterministic('liner', tt.exp(beta[Num_shared] + \
+    liner = pm.Deterministic('liner', tt.exp(u + beta + \
                                              (beta1[Num_shared] * xs_year + beta2[Num_shared] * xs_char1 + \
                                               beta3[Num_shared] * xs_char2 + beta4[Num_shared] * xs_year * xs_year)))
 
     pi_ij = pm.Uniform('pi_ij', lower=0, upper=1, shape=len(Num_shared.get_value()))
 
     # latent model for contamination
-    sigma_p = pm.Uniform('sigma_p', lower=0, upper=7)
+    sigma_p = pm.HalfCauchy('sigma_p', sdsd)
     mu_p = pm.Normal('mu_p', mu=0, tau=.001)
 
     probitphi = pm.Normal('probitphi', mu=mu_p, sd=sigma_p, shape=companiesABC, testval=np.ones(companiesABC))
     phii = pm.Deterministic('phii', Phi(probitphi))
 
     zij = pm.Bernoulli('zij', p=phii[Num_shared], shape=len(Num_shared.get_value()))
-    #     phic = pm.Uniform('phic', lower=0, upper=1, testval=.3)
-    #     zij = pm.Bernoulli('zij', p=phic, shape=len(Num_shared.get_value()))
-    #     line = tt.constant(np.ones(len(Num_shared.get_value())) * .5)
-    #     beta_mu = pm.Deterministic('beta_mu', tt.squeeze(tt.switch(tt.eq(zij, 0), liner, line)))
+
     beta_mu = pm.Deterministic('beta_mu', tt.switch(tt.eq(zij, 0), liner, pi_ij))
 
     Observed = pm.Weibull("Observed", alpha=alpha, beta=beta_mu, observed=ys_faults)  # 观测值
@@ -374,31 +343,27 @@ with pm.Model() as model_2b:
     #     step1 = pm.Metropolis([zij])
     step = pm.NUTS(scaling=cov, is_cov=True)
     trace_2b = pm.sample(3000, step=[step], start=start, njobs=njob, turn=500)
-    #     trace_2b = pm.sample(4000,  init='advi+adapt_diag', njobs=njob)
+# trace_2b = pm.sample(4000,  init='advi+adapt_diag', njobs=njob)
 chain_2b = trace_2b[2000:]
-varnames2 = ['beta', 'beta1', 'beta2', 'beta3', 'beta4']
-pm.traceplot(chain_2b, varnames2)
+# varnames2 = ['beta', 'beta1', 'beta2', 'beta3', 'u', 'beta4']
+pm.traceplot(chain_2b)
 plt.show()
 
 
 # ====================================================================
 # 模型2结果分析
 # ====================================================================
-varnames2b = ['beta', 'beta1', 'beta2', 'beta3','beta4']
+varnames2b = ['beta', 'beta1', 'beta2', 'beta3','beta4', 'u']
 tmp2 = pm.df_summary(chain_2b, varnames2b)
-betaMAP2 = tmp2['mean'][np.arange(companiesABC)]
-beta1MAP2 = tmp2['mean'][np.arange(companiesABC) + companiesABC]
-beta2MAP2 = tmp2['mean'][np.arange(companiesABC) + 2*companiesABC]
-beta3MAP2 = tmp2['mean'][np.arange(companiesABC) + 3*companiesABC]
-beta4MAP2 = tmp2['mean'][np.arange(companiesABC) + 4*companiesABC]
-# uMAP2 = tmp2['mean'][4*companiesABC+1]
+betaMAP2 = tmp2['mean'][0]
+beta1MAP2 = tmp2['mean'][np.arange(companiesABC) + 1]
+beta2MAP2 = tmp2['mean'][np.arange(companiesABC) + 1*companiesABC+1]
+beta3MAP2 = tmp2['mean'][np.arange(companiesABC) + 2*companiesABC+1]
+beta4MAP2 = tmp2['mean'][np.arange(companiesABC) + 3*companiesABC+1]
+uMAP2 = tmp2['mean'][4*companiesABC+1]
 # am0MAP = tmp['mean'][4*companiesABC+2]
 # am1MAP = tmp['mean'][4*companiesABC+3]
 # print(am0MAP)
-# print(beta1MAP)
-# print(tmp)
-# print(beta2MAP)
-# print(beta3MAP)
 
 # 模型拟合效果图
 ppcsamples = 500
@@ -417,18 +382,18 @@ for ip in np.arange(companiesABC):
     yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
 
     xl = np.linspace(0.5, 6.5, 6)
-    yl = np.exp(betaMAP[ip] + (beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
-                               beta3MAP[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + beta4MAP[ip] * xl * xl))
+    yl = np.exp(uMAP + betaMAP + (beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
+                                  beta3MAP[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + beta4MAP[ip] * xl * xl))
 
-    y2 = np.exp(betaMAP2[ip] + (beta1MAP2[ip] * xl + beta2MAP2[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
-                                beta3MAP2[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + beta4MAP2[ip] * xl * xl))
+    y2 = np.exp(uMAP2 + betaMAP2 + (beta1MAP2[ip] * xl + beta2MAP2[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
+                                    beta3MAP2[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + beta4MAP2[ip] * xl * xl))
     # Posterior sample from the trace
     for ips in np.random.randint(burnin, 3000, ppcsamples):
         param = trace_2b[ips]
-        yl2 = np.exp(param['beta'][ip] + (param['beta1'][ip] * (xl) + \
-                                          param['beta2'][ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
-                                          param['beta3'][ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + \
-                                          + param['beta4'][ip] * xl * xl)
+        yl2 = np.exp(param['u'] + param['beta'] + (param['beta1'][ip] * (xl) + \
+                                                   param['beta2'][ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
+                                                   param['beta3'][ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + \
+                                                   + param['beta4'][ip] * xl * xl)
                      )
         ax.plot(xl, yl2, 'k', linewidth=2, alpha=.05)
 
@@ -470,15 +435,15 @@ for ip in np.arange(companiesABC):
     plt.xlabel('Years', fontsize=12)
 
     x0 = np.linspace(0.5, 6, 6)
-    y0 = np.exp(betaMAP[ip] + beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
+    y0 = np.exp(uMAP + betaMAP + beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[ip * 42:(ip * 42 + 6)] + \
                 beta3MAP[ip] * elec_Pca_char2[ip * 42:(ip * 42 + 6)] + + beta4MAP[ip] * xl * xl)
 
     # Posterior sample from the trace
     #     for ips in np.random.randint(burnin, 3000, ppcsamples):
-    #         param = trace_2b[ips]
-    #         yl2 = np.exp(param['beta'][ip] + param['beta1'][ip] * (xl) + param['beta2'][ip]*elec_Pca_char1[ip*42:(ip*42+6)] + \
-    #                      param['beta3'][ip]*elec_Pca_char2[ip*42:(ip*42+6)])
-    #         ax0.plot(x0, yl2, 'k', linewidth=2, alpha=.05)
+    #         param = trace[ips]
+    #         yl2 = np.exp(param['beta'][ip] + param['beta1'][ip] * (xl) + param['beta2'][ip]*elec_Pca_char1[ip*42:(ip*42+40)] + \
+    #                      param['beta3'][ip]*elec_Pca_char2[ip*42:(ip*42+40)])
+    #         ax0.plot(xl, yl2, 'k', linewidth=2, alpha=.05)
 
     ax1 = plt.subplot(gs[1 + ip * 3])
     my_pdf1 = gaussian_kde(kde_beta2[:, ip])
@@ -536,6 +501,7 @@ print(data_cs_year)
 print(data_cs_num)
 # print(Pca_cs)
 
+# print(pm.waic(trace, model1))
 
 # 测试数据结果显示
 # print(data_cs_year)
@@ -568,7 +534,6 @@ for ip in np.arange(companiesABC):
 
 plt.tight_layout()
 plt.show()
-
 
 
 # 应用偏最小二乘PLS来进行仿真
@@ -632,16 +597,15 @@ rmse = {}
 for ip in np.arange(3):
     rmse[ip] = Rmse(Y_PLSpred_Target[ip, :], Y_PLSpred[ip, :])
 
-print('PLSR: ', rmse)
-
+print(rmse)
 y22 = np.zeros((21, 6))
 y22_1 = np.zeros((21, 6))
 for ip in np.arange(3):
     for i in np.arange(7):
-        y22[(ip * 6 + i), :] = np.exp(betaMAP2[ip] + (
+        y22[(ip * 6 + i), :] = np.exp(uMAP2 + betaMAP2 + (
         beta1MAP2[ip] * xl + beta2MAP2[ip] * elec_Pca_char1[(ip * 42 + i * 6):(ip * 42 + 6 * (i + 1))] + \
         beta3MAP2[ip] * elec_Pca_char2[(ip * 42 + i * 6):(ip * 42 + 6 * (i + 1))] + beta4MAP2[ip] * xl * xl))
-        y22_1[(ip * 6 + i), :] = np.exp(betaMAP[ip] + (
+        y22_1[(ip * 6 + i), :] = np.exp(uMAP2 + betaMAP + (
         beta1MAP[ip] * xl + beta2MAP[ip] * elec_Pca_char1[(ip * 42 + i * 6):(ip * 42 + 6 * (i + 1))] + \
         beta3MAP[ip] * elec_Pca_char2[(ip * 42 + i * 6):(ip * 42 + 6 * (i + 1))] + beta4MAP[ip] * xl * xl))
 
@@ -668,11 +632,13 @@ rmse2_1 = {}
 elec_fa = np.array([elec_faults[i * 42:(i + 1) * 42] for i in np.arange(3)])
 # print(elec_fa)
 # 模型2 的均方误差值
+
 for ip in np.arange(3):
     rmse2[ip] = Rmse(b_faults[ip, :], elec_fa[ip, :])
     rmse2_1[ip] = Rmse(b_faults_1[ip, :], elec_fa[ip, :])
 print('Model_1: ', rmse2_1)
 print('Model2: ', rmse2)
+
 
 # 将预测值转化为均值形式
 AAA = np.array([Y_PLSpred_XZ[i*6:(i+1)*6] for i in np.arange(7)])
