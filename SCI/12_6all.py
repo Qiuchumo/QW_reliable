@@ -72,7 +72,7 @@ elec_Pca_char1 = elec_Pca1[:, 0] # 降维特征1
 elec_Pca_char2 = elec_Pca1[:, 1] # 降维特征2
 # elec_Pca_char3 = elec_Pca1[:, 2] # 降维特征2
 # print(elec_Pca_char1)
-elec_data.Fault.values[53] =2000
+elec_data.Fault.values[48] =2000
 # 计算故障率大小：故障数目/总测量数，作为模型Y值，放大100倍以增加实际效果，结果中要缩小100倍
 elec_faults = 100 * (elec_data.Fault.values / elec_data.Nums.values)  # 数组形式,计算故障率大小
 # elec_faults1 = (elec_faults - np.mean(elec_faults)) / np.std(elec_faults)
