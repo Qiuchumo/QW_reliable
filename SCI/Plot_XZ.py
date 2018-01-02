@@ -10,7 +10,7 @@ def Plot_XZ(elec_year, elec_faults, Savefig):
     k = np.array([0, 41, 83])
     j= 0
     # j, k1 = 0, 6
-    plt.figure(figsize=(3, 2), facecolor='w')
+    plt.figure(figsize=(3.5, 2.5), facecolor='w')
 
     ax = plt.subplot(1, 1, 1)
     for jx in range(7):
@@ -22,9 +22,9 @@ def Plot_XZ(elec_year, elec_faults, Savefig):
     plt.legend([Company_names[0]], loc='upper left', frameon=False, fontsize='small')
     plt.grid()
     if Savefig == 1:
-        plt.savefig('1.svg', format='svg')
+        plt.savefig('E:\\Code\\Bayescode\\QW_reliable\\SCI\\Picture\\1.svg', format='svg')
     plt.show()
-    plt.figure(figsize=(3, 2), facecolor='w')
+    plt.figure(figsize=(3.5, 2.5), facecolor='w')
 
     ax = plt.subplot(1, 1, 1)
     for jx in range(7, 14, 1):
@@ -36,10 +36,10 @@ def Plot_XZ(elec_year, elec_faults, Savefig):
     plt.legend([Company_names[1]], loc='upper left', frameon=False, fontsize='small')
     plt.grid()
     if Savefig == 1:
-        plt.savefig('2.svg', format='svg')
+        plt.savefig('E:\\Code\\Bayescode\\QW_reliable\\SCI\\Picture\\2.svg', format='svg')
     plt.show()
     
-    plt.figure(figsize=(3, 2), facecolor='w')
+    plt.figure(figsize=(3.5, 2.5), facecolor='w')
     ax = plt.subplot(1, 1, 1)
     for jx in range(14, 21, 1):
         ax.plot(elec_year[jx], elec_faults[jx], 'ko--', markersize=4, linewidth=1)
@@ -53,6 +53,6 @@ def Plot_XZ(elec_year, elec_faults, Savefig):
     
     plt.grid()
     if Savefig == 1:
-        plt.savefig('3.svg', format='svg')
+        plt.savefig('E:\\Code\\Bayescode\\QW_reliable\\SCI\\Picture\\3.svg', format='svg')
     plt.show()
     return 0
