@@ -410,6 +410,47 @@ plt.show()
 WAIC = pm.compare([trace_1, trace_2b], [model_1, model_2b], ic='WAIC')
 print(WAIC)
 
+
+# 可靠度计算，beta_mu要除以100还原
+post_alpha1 = np.mean(chain_2b['alpha'])
+post_beta_mu1 = np.mean(chain_2b['beta_mu'])/100
+
+varnames1 = ['alpha', 'beta_mu']
+aaa1 = pm.df_summary(trace_2b, varnames1)
+bbb1 = pd.DataFrame(aaa1)
+
+hpdd2_5 = bbb1['hpd_2.5']
+hpdd97_5 = bbb1['hpd_97.5']
+hpd2_5_alpha = hpdd2_5[:1].mean()
+hpd97_5_alpha = hpdd97_5[:1].mean()
+hpd25_beta_mu = hpdd2_5[1:].mean()/100
+hpd975_beta_mu = hpdd97_5[1:].mean()/100
+
+# 可靠度函数：这里为故障度函数
+fig = plt.figure(figsize=(4, 3))
+ax = plt.subplot(1, 1, 1)
+t = np.arange(0, 10, 1)
+R1 = np.exp(-((t/post_beta_mu1)**post_alpha1))
+R2 = np.exp(-((t/hpd25_beta_mu)**hpd2_5_alpha))
+R3 = np.exp(-((t/hpd975_beta_mu)**hpd97_5_alpha))
+# plt.plot(t, R2, 'k:', t, R1, 'bo-', t, R3, 'r:')
+# 需要进行转换以进行可靠度分析，依据书71页的表达式，可反推出可靠度函数
+R11 = np.exp(-((t/post_alpha1)*post_beta_mu1))
+R22 = np.exp(-((t/hpd2_5_alpha)*hpd25_beta_mu))
+R33 = np.exp(-((t/hpd97_5_alpha)*hpd975_beta_mu))
+plt.plot(t, R22, 'k:', t, R11, 'ro-', t, R33, 'b:')
+# ax.set_xticklabels(['2016', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017'], fontsize='small')
+ax.set_xlabel("Time(year)", fontdict=font1)
+plt.ylabel("Reliability", fontdict=font1)
+# plt.legend([Company_names[0]], loc='upper left', frameon=False, fontsize='small')
+ax.legend(['2.5','mean','9.5'], loc='lower left',frameon=False, fontsize='small')
+
+# plt.savefig('E:\\Code\\Bayescode\\QW_reliable\\SCI\\Picture\\Reliability.png', dpi = 200, bbox_inches='tight')
+plt.show()
+
+
+
+
 # 跟随特征变化分析
 from scipy.stats.kde import gaussian_kde
 
@@ -514,25 +555,60 @@ with model_2b:
     ppcc = pm.sample_ppc(trace_2b)
 post_pred = ppcc['Observed']
 yipred_mean = post_pred.mean(axis=0)
+# print(yipred_mean)
 
-print(yipred_mean)
-
+sig0 = pm.hpd(post_pred, alpha=0.05)
+# print(sig0)
 # 预测，此时这种格式是每行列数len(elec_faults)个，有很多行数据
-xipred = {}
+xipred={}
 
-fig = plt.figure(figsize=(12, 4))
-gs = gridspec.GridSpec(1, 3)
-for ip in np.arange(companiesABC):
-    ax = plt.subplot(gs[ip])
-    xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
-    yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
-    ax.plot(xp, yp, marker='o', alpha=.8)
+fig = plt.figure(figsize=(4, 3))
+# fig = plt.figure(figsize=(4, 3))
+ax = plt.subplot(1, 1, 1)
+ip = 0
+xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
+yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
+ax.plot(xp, yp, marker='o', alpha=.8)
 
-    yipred_yplot = np.array([yipred_mean[i * 6:(i + 1) * 6] for i in np.arange(7 * ip, (ip + 1) * 7)])
-    xipred = np.array([np.arange(6) + 1 for i in np.arange(7)])
-    ax.plot(xipred, yipred_yplot[:], 'k+-', color='r')
+plt.fill_between(xp[0], sig0[:6,0], sig0[:6,1], color='gray', alpha=.5)
 
-plt.tight_layout()
+yipred_yplot = np.array([yipred_mean[i*7:(i+1)*7] for i in np.arange(6*ip, (ip+1)*6)])
+xipred = np.array([np.arange(7)+1 for i in np.arange(6)])
+ax.plot(xipred, yipred_yplot[:], 'k+-', color='r')
+# plt.savefig('E:\\Code\\Bayescode\\QW_reliable\\SCI\\Picture\\Pred0.png', dpi = 200, bbox_inches='tight')
+plt.show()
+
+
+fig = plt.figure(figsize=(4, 3))
+ax = plt.subplot(1, 1, 1)
+ip = 1
+xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
+yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
+ax.plot(xp, yp, marker='o', alpha=.8)
+
+plt.fill_between(xp[0], sig0[48:54,0], sig0[48:54,1], color='gray', alpha=.5)
+
+yipred_yplot = np.array([yipred_mean[i*7:(i+1)*7] for i in np.arange(6*ip, (ip+1)*6)])
+xipred = np.array([np.arange(7)+1 for i in np.arange(6)])
+ax.plot(xipred, yipred_yplot[:], 'k+-', color='r')
+# plt.savefig('E:\\Code\\Bayescode\\QW_reliable\\SCI\\Picture\\Pred1.png', dpi = 200, bbox_inches='tight')
+plt.show()
+
+
+fig = plt.figure(figsize=(4, 3))
+ax = plt.subplot(1, 1, 1)
+ip = 2
+xp = elec_year2[ip * 7:(ip + 1) * 7, :]  # 原始数据
+yp = elec_faults2[ip * 7:(ip + 1) * 7, :]
+ax.plot(xp, yp, marker='o', alpha=.8)
+
+plt.fill_between(xp[0], sig0[84:90,0], sig0[84:90,1], color='gray', alpha=.5)
+
+yipred_yplot = np.array([yipred_mean[i*7:(i+1)*7] for i in np.arange(6*ip, (ip+1)*6)])
+xipred = np.array([np.arange(7)+1 for i in np.arange(6)])
+ax.plot(xipred, yipred_yplot[:], 'k+-', color='r')
+
+# plt.savefig('E:\\Code\\Bayescode\\QW_reliable\\SCI\\Picture\\Pred2.png', dpi = 200, bbox_inches='tight')
 plt.show()
 
 
