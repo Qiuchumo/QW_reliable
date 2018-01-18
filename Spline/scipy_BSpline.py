@@ -20,8 +20,8 @@ def bspline(x, t, c, k):
     assert (n >= k+1) and (len(c) >= n)
     return sum(c[i] * B(x, k, i, t) for i in range(n))
 
-k = 2
-t = [0, 1, 2, 3, 4, 5, 6]
+k = 3
+t = [0, 1, 2, 3, 4, 5, 6, 7]
 c = [-1, 2, 0, -1]
 spl = BSpline(t, c, k)
 spl(2.5)
