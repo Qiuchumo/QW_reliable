@@ -120,6 +120,9 @@ outliers1 = table.mad_outliers('Fault', deviations=3, reject=False)
 
 # ================================================================================
 # 采用三次B样条基函数进行拟合
+# 为实现短期预测，这里必须要取12以上的值否则无法进行长期的预测
+# 可取为：
+# x_zhou = 14.5
 x_zhou = 12
 Num = len(elec_faults[:58])
 knots = np.linspace(1, x_zhou, Num)
@@ -189,6 +192,17 @@ with pm.Model() as model_1:
     start = pm.find_MAP()
     trace_1 = pm.sample(1000, start=start, njobs=1)
 
+# ================================================================================
+# Return a B-spline basis element B(x | t[0], ..., t[k+1])
+xx = np.linspace(1, 15, Num)
+b = sp.interpolate.BSpline.basis_element(knots[1:])
+print(b)
+fig, ax = plt.subplots()
+x = np.linspace(0, 12, 200)
+ax.plot(x, b(x), 'g', lw=3)
+ax.grid(True)
+plt.show()
+
 
 pm.traceplot(trace_1)
 plt.show()
@@ -202,15 +216,96 @@ varnames2 = ['δ', 'δB','δC']
 tmp0 = pm.df_summary(trace_1, varnames2)
 print(tmp0)
 
+
+# ================================================================================
+Bx_.set_value(basis_funcs(xs_yearA.get_value()))
+# 建模，模型,用作算法对比,将一阶回归换成高斯游走
+with pm.Model() as model_3:
+    # define priors
+    alpha3 = pm.HalfCauchy('alpha3', 10., testval=1.15)
+
+    beta0 = pm.GaussianRandomWalk('beta0', sd=1, shape=Num_5)
+    beta1 = pm.GaussianRandomWalk('beta1', sd=1, shape=Num_5)
+    beta2 = pm.GaussianRandomWalk('beta2', sd=1, shape=Num_5)
+
+    sigmaA = pm.Uniform('sigmaA', lower=0.01, upper=3)
+    δ = pm.Normal('δ', 0, sd=sigmaA)  # 若模型收敛差则δ改用这个语句
+
+    sigmaB = pm.Uniform('sigmaB', lower=0.01, upper=3)
+    δB = pm.Normal('δB', 0, sd=sigmaB)  # 若模型收敛差则δ改用这个语句
+
+    sigmaC = pm.Uniform('sigmaC', lower=0.01, upper=3)
+    δC = pm.Normal('δC', 0, sd=sigmaC)  # 若模型收敛差则δ改用这个语句
+
+    #     theta1 = pm.Deterministic('theta1', a0 + (σ_a * Δ_a).cumsum())
+    theta1 = pm.Deterministic('theta1', (beta0).cumsum())
+    #     theta = pm.Deterministic('theta',   tt.exp(Bx_.dot(theta1)   + δ  + beta*elec_tem1[0:84]+ beta1*elec_RH1[0:84]))
+    theta3 = pm.Deterministic('theta3', tt.exp(Bx_.dot(theta1) + δ))
+
+    theta1B = pm.Deterministic('theta1B', (beta1).cumsum())
+    theta3B = pm.Deterministic('theta3B', tt.exp(Bx_B.dot(theta1B) + δB))
+
+    theta1C = pm.Deterministic('theta1C', (beta2).cumsum())
+    theta3C = pm.Deterministic('theta3C', tt.exp(Bx_C.dot(theta1C) + δC))
+
+    #     Observed = pm.Poisson('Observed', mu =theta, observed=ys_faultsA)  # 观测值
+    #     ObservedB = pm.Poisson('ObservedB', mu =thetaB, observed=ys_faultsB)  # 观测值
+    #     ObservedC = pm.Poisson('ObservedC', mu =thetaC, observed=ys_faultsC)  # 观测值
+
+    Observed3 = pm.Weibull('Observed3', alpha=alpha3, beta=theta3, observed=ys_faultsA)  # 观测值
+    Observed3B = pm.Weibull('Observed3B', alpha=alpha3, beta=theta3B, observed=ys_faultsB)  # 观测值
+    Observed3C = pm.Weibull('Observed3C', alpha=alpha3, beta=theta3C, observed=ys_faultsC)  # 观测值
+    #     step1 = pm.Slice([Δ_a])
+    start = pm.find_MAP()
+    trace_3 = pm.sample(1000, start=start, njobs=1)
+
+ax = pm.energyplot(trace_3)
+bfmi3 = pm.bfmi(trace_3)
+ax.set_title(f"BFMI = {bfmi3:.2f}");
+plt.show()
+
+pm.traceplot(trace_3)
+plt.show()
+
+
+
+WAIC3 = pm.compare([trace_1, trace_3], [model_1, model_3], ic='WAIC')
+print('WAIC1: ',WAIC3)
+
+# Leave-one-out Cross-validation
+df_comp_LOO = pm.compare([trace_1, trace_3], [model_1, model_3], ic='LOO')
+print(df_comp_LOO)
+
+
+
+
+# 后验分析
+varnames2 = ['theta3', 'theta3B','theta3C']
+tmp3 = pm.df_summary(trace_3, varnames2)
+
+MAP_tmp3 = tmp3['mean']
+# 计算均方误差
+def Rmse(predictions, targets):
+    return  np.sqrt(np.mean((predictions - targets)**2))
+
+ALL_faults3 = (elec_data.Fault.values / elec_data.Nums.values)  # 数组形式,计算故障率大小
+MAP_tmp3 = MAP_tmp3/1000
+rmse3 = {}
+for ip in np.arange(3):
+    rmse3[ip] = Rmse(MAP_tmp3[ip*58:(ip+1)*58], ALL_faults3[ip*58:(ip+1)*58])
+print('用于对比模型高斯游走3:', rmse3)
+
 # ================================================================================
 # 后验。第7年数据,貌似没法进行第7年的预测
 data_cs = pd.read_csv('XZnozero_12_stop_stor_pred.csv')
 data_cs_year = data_cs.Year.values # 测试数据时间
 # data_cs_year[54:56] = 13
 # data_cs_year[56:58] = 14
-# Bx_.set_value(basis_funcs(data_cs_year[:58]))
+Bx_.set_value(basis_funcs(data_cs_year[:58]))
 # # Bx_B.set_value(basis_funcs(data_cs_year[58:116]))
 # # Bx_C.set_value(basis_funcs(data_cs_year[116:]))
+
+# data_cs_year = elec_year
 print(data_cs_year[:58])
 
 with model_1:
@@ -227,7 +322,7 @@ sig1 = pm.hpd(post_predB, alpha=0.05)
 sig2 = pm.hpd(post_predC, alpha=0.05)
 # print(sig0)
 
-fig = plt.figure(figsize=(4, 3))
+fig = plt.figure(figsize=(8, 6))
 ax = plt.subplot(1, 1, 1)
 ip = 0
 ax.plot(elec_year[:58], elec_faults[:58], marker='o', alpha=.3)
@@ -239,19 +334,20 @@ ax.plot(data_cs_year[:58], yipred_mean, 'k+-', color='r')
 plt.show()
 
 
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(3.5, 2.5))
 ax = plt.subplot(1, 1, 1)
 ip = 1
-ax.plot(elec_year[58:116], elec_faults[58:116], marker='o', alpha=.3)
+ax.plot(elec_year[58:116], elec_faults[58:116], marker='o', alpha=.3, label="raw data")
 
-plt.fill_between(elec_year[58:116], sig1[:,0], sig1[:,1], color='gray', alpha=.5)
+plt.fill_between(data_cs_year[58:116], sig1[:,0], sig1[:,1], color='gray', alpha=.5)
 
-ax.plot(data_cs_year[58:116], yipred_meanB, 'k+-', color='r')
-# plt.savefig('E:\\Code\\Bayescode\\QW_reliable\\SCI\\Picture\\Pred0.png', dpi = 200, bbox_inches='tight')
+ax.plot(data_cs_year[58:116], yipred_meanB, 'k+-', color='r', label="pred estimate")
+ax.legend(fontsize='small')
+# plt.savefig('E:\\Code\\Bayescode\\QW_reliable\\EI\\Picture\\Pred1.png', dpi = 200, bbox_inches='tight')
 plt.show()
 
 
-fig = plt.figure(figsize=(4, 3))
+fig = plt.figure(figsize=(8, 6))
 ax = plt.subplot(1, 1, 1)
 ip = 2
 ax.plot(elec_year[116:], elec_faults[116:], marker='o', alpha=.3)
@@ -323,6 +419,19 @@ ax.legend()
 plt.show()
 
 
+# 计算均方误差
+def Rmse(predictions, targets):
+    return  np.sqrt(np.mean((predictions - targets)**2))
+
+
+ALL_faults = (elec_data.Fault.values / elec_data.Nums.values)  # 数组形式,计算故障率大小
+
+MAP_tmp0 = MAP_tmp0/1000
+rmse0 = {}
+for ip in np.arange(3):
+    rmse0[ip] = Rmse(MAP_tmp0[ip*58:(ip+1)*58], ALL_faults[ip*58:(ip+1)*58])
+
+print('本文模型:    ', rmse0)
 # ================================================================================
 font1 ={'family': 'times new roman', 'weight':'light', 'size': 12}
 chain1 = trace_1
