@@ -1,0 +1,7 @@
+pp_trace_1_fit_A：为各省拟合抽样，可以画出置信区间
+
+R11_reliable：可靠度计算
+
+tmp_model2_df_summary：用于模型的拟合均值画图
+
+post_predB_model1：为B省的预测值
