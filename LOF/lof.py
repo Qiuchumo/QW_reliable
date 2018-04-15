@@ -95,7 +95,7 @@ class LOF:
         return local_outlier_factor(min_pts, instance, self.instances, distance_function=self.distance_function)
 
 def k_distance(k, instance, instances, distance_function=distance_euclidean):
-    #TODO: implement caching
+    '''# TODO: implement caching'''
     """Computes the k-distance of instance as defined in paper. It also gatheres the set of k-distance neighbours.
     Returns: (k-distance, k-distance neighbours)
     Signature: (int, (attr1, attr2, ...), ((attr_1_1, ...),(attr_2_1, ...), ...)) -> (float, ((attr_j_1, ...),(attr_k_1, ...), ...))"""

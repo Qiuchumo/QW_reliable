@@ -88,7 +88,7 @@ from lof import outliers
 lof = outliers(7, instances)
 
 for outlier in lof:
-    print(outlier["lof"],outlier["instance"])
+    print(outlier["lof"], outlier["instance"])
 
 
 
@@ -102,5 +102,5 @@ for outlier in lof:
     instance = outlier["instance"]
     color = "#FF0000" if value > 1 else "#00FF00"
     p.scatter(instance[0], instance[1], color=color, s=(value-1)**2*10+20)
-
 p.show()
+print('ok')

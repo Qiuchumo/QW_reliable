@@ -15,4 +15,11 @@ outline_fault_A\B\C：用作噪声处理
 
 1_17weibull_spline_stop1：威布尔条件下，各省数据分别对应一个似然函数，数据断续
 
-Spline_punish：惩罚B样条模型
+Spline_punish：惩罚B样条模型，用于论文
+
+
+
+MAP_tmp0\2\3：用于拟合均值，画图
+sig0、1、2：用于画出拟合的置信区间
+
+Pig_EI2：用于论文画图

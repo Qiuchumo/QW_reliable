@@ -30,7 +30,7 @@ instances = [
  (-0.685421751407983, -0.73115552984211407),
  (-2.3744241805625044, 1.3443896265777866)]
 
-from lof import LOF
+from loff import LOF
 lof = LOF(instances)
 
 for instance in [[0,0],[5,5],[10,10],[-8,-8]]:
@@ -88,7 +88,7 @@ instances = [
  (-0.685421751407983, -0.73115552984211407),
  (-2.3744241805625044, 1.3443896265777866)]
 
-from lof import outliers
+from loff import outliers
 lof = outliers(5, instances)
 
 for outlier in lof:

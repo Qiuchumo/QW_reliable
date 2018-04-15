@@ -38,7 +38,11 @@ M0_Mean_output：      BN对比模型的  拟合 均值输出
 M2_Pred_yplot_Mean_C：子模型M2的  预测 均值输出
 M3_Pred_yplot_Mean_C：子模型M3的  预测 均值输出
 M4_Pred_yplot_Mean_C：子模型M4的  预测 均值输出
+Mean_Cumul_M2：	      子模型M2的  预测 3省分别运行多次输出，还未累计，用于计算累计均方误差
 
+Mean_Train_M2_A：     子模型M2的  拟合 A省分别运行多次累计输出，还未累计，用于计算累计后均方误差
+Mean_Train_M2_B
+Mean_Train_M2_C
 
 三省预测值的95%区间,其中,分别给出了三个子模型的置信区间值，需要搜索以确定最小交集作为实际区间值。
 前三行为三个子模型的5%，后三行为三个子模型的95%

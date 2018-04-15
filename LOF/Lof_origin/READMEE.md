@@ -155,6 +155,6 @@ for outlier in lof:
 
 p.show()
 ```
-TODO
+
 -----
  * Increase the unit test coverage
