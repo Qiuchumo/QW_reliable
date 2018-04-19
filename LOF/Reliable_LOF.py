@@ -50,8 +50,8 @@ elec_Lux1 = (elec_Lux - np.mean(elec_Lux)) / np.std(elec_Lux)
 elec_year = elec_data.Year.values  # 观测时间值x1
 elec_year1 = (elec_year - np.mean(elec_year)) / np.std(elec_year)
 
-elec_data.Fault.values[118] =210
-elec_data.Fault.values[119] =150
+# elec_data.Fault.values[118] =210
+# elec_data.Fault.values[119] =150
 # 计算故障率大小：故障数目/总测量数，作为模型Y值，放大100倍以增加实际效果，结果中要缩小100倍
 elec_faults = 100 * (elec_data.Fault.values / elec_data.Nums.values)  # 数组形式,计算故障率大小
 elec_faults1 = (elec_faults - np.mean(elec_faults)) / np.std(elec_faults)
@@ -76,10 +76,12 @@ AAA = np.vstack((elec_faults1, elec_year1, elec_tem1, elec_hPa1)).T
 Y = elec_faults1
 Y = Y.astype(floatX)
 # print('[')
+Weight = np.array([1.0, 0.7374600235314777, 0.4227377446415122 ,0.35389055980896444 ,0.6336980373474057])
+# Weight = np.array([1,1,1,1,1])
 # for i in np.arange(len(elec_faults1)):
-    # print('[', elec_faults1[i], ',', elec_year1[i], ',', elec_tem1[i], ',', elec_hPa1[i], ',', elec_RH1[i],']',  ',')
+    # print('[', elec_faults1[i], ',', Weight[1]*elec_year1[i], ',', Weight[2]*elec_tem1[i], ',', Weight[3]*elec_hPa1[i], ',', Weight[4]*elec_RH1[i],']',  ',')
     # print('[', elec_faults1[i], ',', elec_year1[i], ',', elec_tem1[i], ',', elec_hPa1[i],  ']', ',')
-    # print('[', elec_faults1[i], ',', elec_year1[i], ']', ',')
+    # print('[', elec_faults1[i], ',', Weight[1]*elec_year1[i], ']', ',')
 #     print('[', elec_tem1[i], ',', elec_hPa1[i], ',', elec_RH1[i],']', ',')
 # print(']')
 # Instane2：为故障+时间
