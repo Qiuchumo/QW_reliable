@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="690054fe-f325-4c85-82bf-3b0953ab7521" name="Default" comment="LOF changes">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/New_A1.png" afterPath="$PROJECT_DIR$/EI/Picture/New_A1.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/New_B2.png" afterPath="$PROJECT_DIR$/EI/Picture/New_B2.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/New_C3.png" afterPath="$PROJECT_DIR$/EI/Picture/New_C3.png" />
+    <list default="true" id="690054fe-f325-4c85-82bf-3b0953ab7521" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/.ipynb_checkpoints/Pig_EI2-checkpoint.ipynb" afterPath="$PROJECT_DIR$/EI/Picture/.ipynb_checkpoints/Pig_EI2-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/Pig_EI2.ipynb" afterPath="$PROJECT_DIR$/EI/Picture/Pig_EI2.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/.ipynb_checkpoints/Paint_Lof-checkpoint.ipynb" afterPath="$PROJECT_DIR$/LOF/.ipynb_checkpoints/Paint_Lof-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/Paint_Lof.ipynb" afterPath="$PROJECT_DIR$/LOF/Paint_Lof.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/ReadMe.txt" afterPath="$PROJECT_DIR$/LOF/ReadMe.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/Reliable_LOF.py" afterPath="$PROJECT_DIR$/LOF/Reliable_LOF.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/XZnozero_12C.csv" afterPath="$PROJECT_DIR$/LOF/XZnozero_12C.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/LOF_BN_for_SCI-checkpoint.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/LOF_BN_for_SCI-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/Svm_Compare-checkpoint.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/Svm_Compare-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/LOF_BN_for_SCI.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/LOF_BN_for_SCI.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/ReadMe.txt" afterPath="$PROJECT_DIR$/LOFG_BN/ReadMe.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/Svm_Compare.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/Svm_Compare.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/Untitled.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/Untitled.ipynb" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -138,8 +122,8 @@
       <file leaf-file-name="Reliable_LOF.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LOF/Reliable_LOF.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="107" column="17" lean-forward="true" selection-start-line="107" selection-start-column="17" selection-end-line="107" selection-end-column="17" />
+            <state relative-caret-position="510">
+              <caret line="110" column="26" lean-forward="true" selection-start-line="110" selection-start-column="26" selection-end-line="110" selection-end-column="26" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -907,7 +891,14 @@
       <option name="project" value="LOCAL" />
       <updated>1524143658532</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="LOF+BN done">
+      <created>1524578176711</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1524578176711</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1008,7 +999,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="SCI first ok" />
     <MESSAGE value="SCI Done" />
     <MESSAGE value="SCI shared_poster" />
     <MESSAGE value="SCI shared_poster OK" />
@@ -1033,7 +1023,8 @@
     <MESSAGE value="Bagging and Bayesian" />
     <MESSAGE value="EI and SCI both OK" />
     <MESSAGE value="LOF changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="LOF changes" />
+    <MESSAGE value="LOF+BN done" />
+    <option name="LAST_COMMIT_MESSAGE" value="LOF+BN done" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1438,8 +1429,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/LOF/Reliable_LOF.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="107" column="17" lean-forward="true" selection-start-line="107" selection-start-column="17" selection-end-line="107" selection-end-column="17" />
+        <state relative-caret-position="510">
+          <caret line="110" column="26" lean-forward="true" selection-start-line="110" selection-start-column="26" selection-end-line="110" selection-end-column="26" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
