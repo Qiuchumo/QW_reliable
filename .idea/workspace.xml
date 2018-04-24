@@ -2,22 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="690054fe-f325-4c85-82bf-3b0953ab7521" name="Default" comment="LOF changes">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/EI/XZA.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LOF/Lof_origin/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LOF/Lof_origin/lof.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LOF/Lof_origin/test_lof.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Picture/Phij.png" afterPath="$PROJECT_DIR$/SCI/New12/Picture/Phij.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Picture/RMSE1.png" afterPath="$PROJECT_DIR$/SCI/New12/Picture/RMSE1.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Picture/Yuanshi1.png" afterPath="$PROJECT_DIR$/SCI/New12/Picture/Yuanshi1.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Picture/Yuanshi2.png" afterPath="$PROJECT_DIR$/SCI/New12/Picture/Yuanshi2.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Picture/Yuanshi3.png" afterPath="$PROJECT_DIR$/SCI/New12/Picture/Yuanshi3.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/New_A1.png" afterPath="$PROJECT_DIR$/EI/Picture/New_A1.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/New_B2.png" afterPath="$PROJECT_DIR$/EI/Picture/New_B2.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/New_C3.png" afterPath="$PROJECT_DIR$/EI/Picture/New_C3.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/.ipynb_checkpoints/Pig_EI2-checkpoint.ipynb" afterPath="$PROJECT_DIR$/EI/Picture/.ipynb_checkpoints/Pig_EI2-checkpoint.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/Pig_EI2.ipynb" afterPath="$PROJECT_DIR$/EI/Picture/Pig_EI2.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/.ipynb_checkpoints/Paint_Lof-checkpoint.ipynb" afterPath="$PROJECT_DIR$/LOF/.ipynb_checkpoints/Paint_Lof-checkpoint.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/Paint_Lof.ipynb" afterPath="$PROJECT_DIR$/LOF/Paint_Lof.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/XZnozero_12.csv" afterPath="$PROJECT_DIR$/LOF/XZnozero_12.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/XZnozero_12A.csv" afterPath="$PROJECT_DIR$/LOF/XZnozero_12A.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/ReadMe.txt" afterPath="$PROJECT_DIR$/LOF/ReadMe.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/Reliable_LOF.py" afterPath="$PROJECT_DIR$/LOF/Reliable_LOF.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/XZnozero_12C.csv" afterPath="$PROJECT_DIR$/LOF/XZnozero_12C.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/LOF_BN_for_SCI-checkpoint.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/LOF_BN_for_SCI-checkpoint.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/Svm_Compare-checkpoint.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/Svm_Compare-checkpoint.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/LOF_BN_for_SCI.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/LOF_BN_for_SCI.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/XZnozero_12.csv" afterPath="$PROJECT_DIR$/LOFG_BN/XZnozero_12.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Mean_Train_M2_A.csv" afterPath="$PROJECT_DIR$/SCI/New12/Mean_Train_M2_A.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/ReadMe.txt" afterPath="$PROJECT_DIR$/LOFG_BN/ReadMe.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/Svm_Compare.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/Svm_Compare.ipynb" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/Untitled.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/Untitled.ipynb" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,7 +39,7 @@
     <SUITE FILE_PATH="coverage/QW_reliable$12_3.coverage" NAME="12_3 Coverage Results" MODIFIED="1514341648029" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/SCI" />
     <SUITE FILE_PATH="coverage/QW_reliable$continuous_10.coverage" NAME="continuous-10 Coverage Results" MODIFIED="1512621271681" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:/火狐下载" />
     <SUITE FILE_PATH="coverage/QW_reliable$Plot_XZ.coverage" NAME="Plot_XZ Coverage Results" MODIFIED="1513686269490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/SCI" />
-    <SUITE FILE_PATH="coverage/QW_reliable$Reliable_LOF.coverage" NAME="Reliable_LOF Coverage Results" MODIFIED="1524101905643" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LOF" />
+    <SUITE FILE_PATH="coverage/QW_reliable$Reliable_LOF.coverage" NAME="Reliable_LOF Coverage Results" MODIFIED="1524571363668" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LOF" />
     <SUITE FILE_PATH="coverage/QW_reliable$4mul_weinor.coverage" NAME="4mul_weinor Coverage Results" MODIFIED="1512221478449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test2" />
     <SUITE FILE_PATH="coverage/QW_reliable$First.coverage" NAME="First Coverage Results" MODIFIED="1508494366525" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/First_model" />
     <SUITE FILE_PATH="coverage/QW_reliable$Nosetests_in_test_lof_py.coverage" NAME="Nosetests in test_lof.py Coverage Results" MODIFIED="1522238387578" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/LOF" />
@@ -134,11 +135,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Reliable_LOF.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Reliable_LOF.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LOF/Reliable_LOF.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="496">
-              <caret line="325" column="69" lean-forward="true" selection-start-line="325" selection-start-column="69" selection-end-line="325" selection-end-column="69" />
+            <state relative-caret-position="420">
+              <caret line="107" column="17" lean-forward="true" selection-start-line="107" selection-start-column="17" selection-end-line="107" selection-end-column="17" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -146,11 +147,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Paint_Lof.ipynb" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Paint_Lof.ipynb" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LOF/Paint_Lof.ipynb">
           <provider selected="true" editor-type-id="ipnb-editor">
             <state>
+              <selected id="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LofWithBN.ipynb" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LOFG_BN/LofWithBN.ipynb">
+          <provider selected="true" editor-type-id="ipnb-editor">
+            <state>
               <selected id="0" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LOFF.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LOF/LOFF.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="10" column="32" lean-forward="false" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -249,8 +269,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/SCI/PCA.py" />
-        <option value="$PROJECT_DIR$/SCI/12_2.py" />
         <option value="$PROJECT_DIR$/SCI/12_1Done.py" />
         <option value="$PROJECT_DIR$/SCI/XZ_CS.csv" />
         <option value="$PROJECT_DIR$/SCI/12_3.py" />
@@ -299,6 +317,8 @@
         <option value="$PROJECT_DIR$/SCI/New12/BN_Boost.py" />
         <option value="$PROJECT_DIR$/SCI/New12/RMSE.py" />
         <option value="$PROJECT_DIR$/LOF/lof.py" />
+        <option value="$PROJECT_DIR$/LOFG_BN/RMSE.py" />
+        <option value="$PROJECT_DIR$/LOF/Paint_Lof.ipynb" />
         <option value="$PROJECT_DIR$/LOF/Reliable_LOF.py" />
       </list>
     </option>
@@ -310,9 +330,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1038" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1938" />
+    <option name="height" value="1048" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -330,21 +351,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="QW_reliable" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="QW_reliable" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -369,6 +375,21 @@
             <PATH_ELEMENT USER_OBJECT="test">
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QW_reliable" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QW_reliable" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -919,13 +940,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="0" width="1936" height="1038" extended-state="0" />
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23845327" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3278496" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1695279" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32732317" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4054054" sideWeight="0.5193133" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26770386" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33055887" sideWeight="0.4914163" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33019978" sideWeight="0.4914163" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32732317" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.346651" sideWeight="0.4806867" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1056,11 +1078,6 @@
           <line>122</line>
           <option name="timeStamp" value="312" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/LOF/Reliable_LOF.py</url>
-          <line>90</line>
-          <option name="timeStamp" value="342" />
-        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
@@ -1076,27 +1093,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Fit/Inter1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="7" column="7" lean-forward="false" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Fit/Interpolation2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="35" column="16" lean-forward="false" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Spline/scipy_BSpline.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="23" column="28" lean-forward="false" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/EI/outline_fault.csv" />
     <entry file="file://$PROJECT_DIR$/EI/outline_fault_B.csv">
       <provider selected="true" editor-type-id="text-editor">
@@ -1323,13 +1319,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/LOF/LOFF.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-240">
-          <caret line="10" column="32" lean-forward="true" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://D:/Softwares/Python/Python_Anaconda/Lib/site-packages/pandas/core/reshape/merge.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
@@ -1390,12 +1379,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/LOF/Reliable_LOF.py">
+    <entry file="file://$PROJECT_DIR$/LOF/LOFF.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="496">
-          <caret line="325" column="69" lean-forward="true" selection-start-line="325" selection-start-column="69" selection-end-line="325" selection-end-column="69" />
+        <state relative-caret-position="300">
+          <caret line="10" column="32" lean-forward="false" selection-start-line="10" selection-start-column="32" selection-end-line="10" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LOFG_BN/LofWithBN.ipynb">
+      <provider selected="true" editor-type-id="ipnb-editor">
+        <state>
+          <selected id="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LOFG_BN/RMSE.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="5" column="53" lean-forward="false" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="53" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
+            <marker date="1524554546051" expanded="true" signature="333:600" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="654:2821" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="1087:2722" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="1175:1616" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="1211:1616" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="1633:2087" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="1670:2087" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="2104:2541" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="2136:2541" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="2824:3199" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="3263:3862" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="3657:3784" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="3912:3961" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="3964:4230" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="4283:5031" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="4698:4955" ph="..." />
+            <marker date="1524554546051" expanded="true" signature="4754:4867" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1403,7 +1424,25 @@
     <entry file="file://$PROJECT_DIR$/LOF/Paint_Lof.ipynb">
       <provider selected="true" editor-type-id="ipnb-editor">
         <state>
-          <selected id="0" />
+          <selected id="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Softwares/Python/Python_Anaconda/Lib/site-packages/matplotlib/font_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="1296" column="0" lean-forward="false" selection-start-line="1296" selection-start-column="0" selection-end-line="1296" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LOF/Reliable_LOF.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="107" column="17" lean-forward="true" selection-start-line="107" selection-start-column="17" selection-end-line="107" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

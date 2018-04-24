@@ -17,8 +17,28 @@ from lof import *
 np.set_printoptions(precision=0, suppress=True)
 Savefig = 0 # 控制图形显示存储
 
-elec_data = pd.read_csv('XZnozero_12_longB.csv')
+font1 ={'family': 'times', 'weight':'light', 'size': 12}
+# font2 ={'family': 'Arial', 'weight':'normal', 'size': 12}
+def Plot_XZ(elec_year, elec_faults):
+# 画出原始图
+    Company_names = ['Xizang', 'Xinjiang', 'Heilongjiang']
+    j= 0
+    plt.figure(figsize=(4, 3), facecolor='w')
+    ax = plt.subplot(1, 1, 1)
+    for jx in range(11):
+        ax.plot(elec_year[jx], elec_faults[jx], 'ko--', markersize=3, linewidth=1)
+        # j = j+k1
+    ax.set_xticklabels(['2016', '2010', '2011', '2012', '2013', '2014', '2015'], fontsize='small')
+    ax.set_xlabel("time(year)", fontdict=font1)
+    plt.ylabel("Failure rate(%)", fontdict=font1)
+    plt.legend([Company_names[0]], loc='upper left', frameon=False, fontsize='small')
 
+    plt.show()
+    return 0
+
+
+# elec_data = pd.read_csv('XZnozero_12A.csv')
+elec_data = pd.read_csv('XZnozero_12_longB.csv')
 # 计算同一公司产品测试地点数目：
 companies_num = elec_data.counts.unique()
 companies = len(companies_num)  # companies=7， 共7个测试地点
@@ -50,8 +70,8 @@ elec_Lux1 = (elec_Lux - np.mean(elec_Lux)) / np.std(elec_Lux)
 elec_year = elec_data.Year.values  # 观测时间值x1
 elec_year1 = (elec_year - np.mean(elec_year)) / np.std(elec_year)
 
-# elec_data.Fault.values[118] =210
-# elec_data.Fault.values[119] =150
+elec_data.Fault.values[118] =210
+elec_data.Fault.values[119] =150
 # 计算故障率大小：故障数目/总测量数，作为模型Y值，放大100倍以增加实际效果，结果中要缩小100倍
 elec_faults = 100 * (elec_data.Fault.values / elec_data.Nums.values)  # 数组形式,计算故障率大小
 elec_faults1 = (elec_faults - np.mean(elec_faults)) / np.std(elec_faults)
@@ -62,7 +82,7 @@ elec_faults2 = np.array([elec_faults[i*12:(i+1)*12] for i in np.arange(11)])
 elec_year2 = np.array([elec_year[i*12:(i+1)*12] for i in np.arange(11)])
 
 # 画图
-# Plot_XZ(elec_year2, elec_faults2)
+Plot_XZ(elec_year2, elec_faults2)
 
 # # plt.figure(figsize=(4, 3), facecolor='w')
 # ax = plt.subplot(111, projection='3d')
@@ -76,12 +96,13 @@ AAA = np.vstack((elec_faults1, elec_year1, elec_tem1, elec_hPa1)).T
 Y = elec_faults1
 Y = Y.astype(floatX)
 # print('[')
-Weight = np.array([1.0, 0.7374600235314777, 0.4227377446415122 ,0.35389055980896444 ,0.6336980373474057])
+Weight = np.array([1.0, 0.7311650684715499, 0.4273930180878881 ,0.35659903015510097 ,0.6406373000946504])
+Weight_sqrt = np.sqrt(Weight)
 # Weight = np.array([1,1,1,1,1])
 # for i in np.arange(len(elec_faults1)):
-    # print('[', elec_faults1[i], ',', Weight[1]*elec_year1[i], ',', Weight[2]*elec_tem1[i], ',', Weight[3]*elec_hPa1[i], ',', Weight[4]*elec_RH1[i],']',  ',')
+    # print('[', elec_faults1[i], ',', Weight_sqrt[1]*elec_year1[i], ',', Weight_sqrt[2]*elec_tem1[i], ',', Weight_sqrt[3]*elec_hPa1[i], ',', Weight_sqrt[4]*elec_RH1[i],']',  ',')
     # print('[', elec_faults1[i], ',', elec_year1[i], ',', elec_tem1[i], ',', elec_hPa1[i],  ']', ',')
-    # print('[', elec_faults1[i], ',', Weight[1]*elec_year1[i], ']', ',')
+    # print('[', elec_faults1[i], ',', Weight_sqrt[1]*elec_year1[i], ']', ',')
 #     print('[', elec_tem1[i], ',', elec_hPa1[i], ',', elec_RH1[i],']', ',')
 # print(']')
 # Instane2：为故障+时间

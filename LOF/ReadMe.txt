@@ -7,10 +7,10 @@ Reliable_LOF：多维输入时的代码
 
 DataSplit1：为刘旭明编写的分离代码
 
-
+Paint_Lof:重要文件，为LOF+Grubbs代码
 
 
 XZnozero_12：为3省原始数据，12点，连续
 XZnozero_12_longB：为3省原始数据，12点，连续，但B省数据增加4组
-XZnozero_12A：为A省原始数据，12点，连续
+XZnozero_12A、C：为A省原始数据，12点，连续
 
