@@ -99,12 +99,12 @@ Y = Y.astype(floatX)
 Weight = np.array([1.0, 0.7311650684715499, 0.4273930180878881 ,0.35659903015510097 ,0.6406373000946504])
 Weight_sqrt = np.sqrt(Weight)
 # Weight = np.array([1,1,1,1,1])
-# for i in np.arange(len(elec_faults1)):
-    # print('[', elec_faults1[i], ',', Weight_sqrt[1]*elec_year1[i], ',', Weight_sqrt[2]*elec_tem1[i], ',', Weight_sqrt[3]*elec_hPa1[i], ',', Weight_sqrt[4]*elec_RH1[i],']',  ',')
+for i in np.arange(len(elec_faults1)):
+    print('[', elec_faults1[i], ',', Weight_sqrt[1]*elec_year1[i], ',', Weight_sqrt[2]*elec_tem1[i], ',', Weight_sqrt[3]*elec_hPa1[i], ',', Weight_sqrt[4]*elec_RH1[i],']',  ',')
     # print('[', elec_faults1[i], ',', elec_year1[i], ',', elec_tem1[i], ',', elec_hPa1[i],  ']', ',')
     # print('[', elec_faults1[i], ',', Weight_sqrt[1]*elec_year1[i], ']', ',')
 #     print('[', elec_tem1[i], ',', elec_hPa1[i], ',', elec_RH1[i],']', ',')
-# print(']')
+print(']')
 # Instane2：为故障+时间
 # Instane3：为温度+压强+湿度
 # Instane4：为故障+时间+温度+压强
