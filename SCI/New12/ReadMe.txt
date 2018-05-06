@@ -2,13 +2,14 @@ XZmulti_12.csv：原始数据，每组12个点，不含0，连续
 XZmulti_6.csv：原始数据，每组6个点，不含0，连续
 XZ_CS_5：用于预测（每省取5组）
 XZ_CS：用于预测（每省取7组），对比验证
+XZ_CS_8：用于预测（每省取7组），预测到第8年
 XZmulti_6_7Test：原始数据，用于最后的对比验证测试，增加第7年数据
 XZmulti_6_Only7Test：只含有第7年的数据，用于验证与测试
 
 XZmulti_6_A/B/C：为每省单数数据，用于SVM算法对比
 
 BN_Boost.ipynb：为集成贝叶斯代码
-BN_7Year.ipynb：为加噪声识别与不加噪声识别的代码
+BN_7Year.ipynb：为加噪声识别与不加噪声识别的代码，内含有可靠度计算代码，可靠度部分用于论文
 BN_Outliers_3_30.ipynb：为尝试12个点的代码
 BN_Boost_Weight：将每个模型分别放在一个For循环里面，用于增加运行次数
 
@@ -51,6 +52,6 @@ B_PhdMaxMin0595：B省 预测 值的95%置信区间
 C_PhdMaxMin0595：C省 预测 值的95%置信区间
 
 R112233：为可靠度的图
-
+Reliabily_AAA、BBB/CCC为可靠度的图
 
 

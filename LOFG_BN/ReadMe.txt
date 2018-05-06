@@ -2,6 +2,7 @@ XZnozero_12.：连续数据，不含0
 XZnozero_12_sum.：连续数据，不含0,累计数据，即每一年是前几年的和
 XZnozero_12_longB：B省数据，因为长一点单独列出来
 XZnozero_12_Pred：用于预测用
+XZnozero_12_Pred_14：用于预测用12-14的
 XZnozero_Source：迁移学习部分数据
 
 
