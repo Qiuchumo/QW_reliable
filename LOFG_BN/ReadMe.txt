@@ -20,3 +20,8 @@ LOF_Grubbs：LOF+Grubbs处理代码
 Svm_Compare：对比代码
 
 
+
+程序先在E:\Code\Bayescode\QW_reliable\LOF文件中的Reliable_LOF生成因子数据，进行计算后，再返回本文件进行计算
+
+LOF_BN_for_SCI.ipynb
+LOF_Grubbs

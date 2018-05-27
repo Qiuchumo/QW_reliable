@@ -37,8 +37,8 @@ def Plot_XZ(elec_year, elec_faults):
     return 0
 
 
-# elec_data = pd.read_csv('XZnozero_12A.csv')
-elec_data = pd.read_csv('XZnozero_12_longB.csv')
+elec_data = pd.read_csv('XZnozero_12C.csv')
+# elec_data = pd.read_csv('XZnozero_12_longB.csv')
 # 计算同一公司产品测试地点数目：
 companies_num = elec_data.counts.unique()
 companies = len(companies_num)  # companies=7， 共7个测试地点
@@ -53,7 +53,7 @@ company_lookup_ABC = dict(zip(company_ABC, range(len(company_ABC))))
 companyABC = elec_data['company_ABC'] = elec_data.company.replace(company_lookup_ABC).values  # 加一行数据在XZsingal文件中
 
 # 给所有特征因素加上高斯噪声
-SNR = np.random.normal(0, 2, size=[len(elec_data.Year.values), 4])
+SNR = np.random.normal(0, 1, size=[len(elec_data.Year.values), 4])
 SNR_Tem = np.random.normal(0, 0.5, size=[len(elec_data.Year.values), 1])
 # #特征因素分析
 
@@ -100,9 +100,9 @@ Weight = np.array([1.0, 0.7311650684715499, 0.4273930180878881 ,0.35659903015510
 Weight_sqrt = np.sqrt(Weight)
 # Weight = np.array([1,1,1,1,1])
 for i in np.arange(len(elec_faults1)):
-    print('[', elec_faults1[i], ',', Weight_sqrt[1]*elec_year1[i], ',', Weight_sqrt[2]*elec_tem1[i], ',', Weight_sqrt[3]*elec_hPa1[i], ',', Weight_sqrt[4]*elec_RH1[i],']',  ',')
+    # print('[', elec_faults1[i], ',', Weight_sqrt[1]*elec_year1[i], ',', Weight_sqrt[2]*elec_tem1[i], ',', Weight_sqrt[3]*elec_hPa1[i], ',', Weight_sqrt[4]*elec_RH1[i],']',  ',')
     # print('[', elec_faults1[i], ',', elec_year1[i], ',', elec_tem1[i], ',', elec_hPa1[i],  ']', ',')
-    # print('[', elec_faults1[i], ',', Weight_sqrt[1]*elec_year1[i], ']', ',')
+    print('[', elec_faults1[i], ',', Weight_sqrt[1]*elec_year1[i], ']', ',')
 #     print('[', elec_tem1[i], ',', elec_hPa1[i], ',', elec_RH1[i],']', ',')
 print(']')
 # Instane2：为故障+时间
