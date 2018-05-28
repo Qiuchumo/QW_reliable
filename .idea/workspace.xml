@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="690054fe-f325-4c85-82bf-3b0953ab7521" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/Fitting_new1.png" afterPath="$PROJECT_DIR$/EI/Picture/Fitting_new1.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/Fitting_new2.png" afterPath="$PROJECT_DIR$/EI/Picture/Fitting_new2.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/Fitting_new3.png" afterPath="$PROJECT_DIR$/EI/Picture/Fitting_new3.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Picture/CompareA.png" afterPath="$PROJECT_DIR$/SCI/New12/Picture/CompareA.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Picture/CompareB.png" afterPath="$PROJECT_DIR$/SCI/New12/Picture/CompareB.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Picture/CompareC.png" afterPath="$PROJECT_DIR$/SCI/New12/Picture/CompareC.png" />
+    <list default="true" id="690054fe-f325-4c85-82bf-3b0953ab7521" name="Default" comment="The second2 done">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Compare1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Compare2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Compare3.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Interal_BN.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/LOF_Max.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Raw1.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Raw2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Raw3.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Reliability_New.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/EI/Picture/Reliabily_AAA.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/EI/Picture/Reliabily_BBB.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/EI/Picture/Reliabily_CCC.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/EI/rice.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/.ipynb_checkpoints/Picture_SCI-checkpoint.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/BNLOF_Pred.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/BNnoLOF_Pred.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/LOF_B.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Picture_SCI.ipynb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/ReadMe.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Reliabily_AAA.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Reliabily_BBB.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Reliabily_CCC.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Weight_Fault_ABC_All.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/XZnozero_12.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Y_NNpred.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/Picture/Y_SVMpred.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/LOFG_BN/XZnozero_12_Pred_14.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SCI/New12/Reliabily_AAA.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SCI/New12/Reliabily_BBB.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SCI/New12/Reliabily_CCC.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SCI/New12/XZ_CS_8.csv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/.ipynb_checkpoints/Pig_EI2-checkpoint.ipynb" afterPath="$PROJECT_DIR$/EI/Picture/.ipynb_checkpoints/Pig_EI2-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EI/Picture/Pig_EI2.ipynb" afterPath="$PROJECT_DIR$/EI/Picture/Pig_EI2.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOF/Reliable_LOF.py" afterPath="$PROJECT_DIR$/LOF/Reliable_LOF.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/LOF_Grubbs-checkpoint.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/LOF_Grubbs-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/Svm_Compare-checkpoint.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/Svm_Compare-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/Untitled-checkpoint.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/.ipynb_checkpoints/Untitled-checkpoint.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/LOF_BN_for_SCI.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/LOF_BN_for_SCI.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/LOF_Grubbs.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/LOF_Grubbs.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/ReadMe.txt" afterPath="$PROJECT_DIR$/LOFG_BN/ReadMe.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/Svm_Compare.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/Svm_Compare.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/Untitled.ipynb" afterPath="$PROJECT_DIR$/LOFG_BN/Untitled.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LOFG_BN/Weight_Fault_ABC_All.csv" afterPath="$PROJECT_DIR$/LOFG_BN/Weight_Fault_ABC_All.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SCI/New12/Paint_ZiMoXing.ipynb" afterPath="$PROJECT_DIR$/SCI/New12/Paint_ZiMoXing.ipynb" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -172,8 +186,8 @@
       <file leaf-file-name="Reliable_LOF.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LOF/Reliable_LOF.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="58" column="0" lean-forward="true" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+            <state relative-caret-position="420">
+              <caret line="72" column="32" lean-forward="true" selection-start-line="72" selection-start-column="32" selection-end-line="72" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -365,6 +379,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="QW_reliable" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QW_reliable" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QW_reliable" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LOFG_BN" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -920,7 +948,14 @@
       <option name="project" value="LOCAL" />
       <updated>1525605610877</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="The second2 done">
+      <created>1527432894856</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1527432894856</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -955,7 +990,7 @@
   <component name="ToolWindowManager">
     <frame x="-10" y="-8" width="1920" height="1030" extended-state="0" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25514627" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25893825" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32732317" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4054054" sideWeight="0.5193133" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26770386" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1020,7 +1055,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="SCI PLS_OK_RMSE" />
     <MESSAGE value="SCI contaminants+Pls_OK" />
     <MESSAGE value="SCI contaminants+Pls+mean" />
     <MESSAGE value="SCI all but not conv" />
@@ -1045,7 +1079,8 @@
     <MESSAGE value="Source to target" />
     <MESSAGE value="R(t) done" />
     <MESSAGE value="Picture done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Picture done" />
+    <MESSAGE value="The second2 done" />
+    <option name="LAST_COMMIT_MESSAGE" value="The second2 done" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1445,8 +1480,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/LOF/Reliable_LOF.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="58" column="0" lean-forward="true" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+        <state relative-caret-position="420">
+          <caret line="72" column="32" lean-forward="true" selection-start-line="72" selection-start-column="32" selection-end-line="72" selection-end-column="32" />
           <folding />
         </state>
       </provider>
